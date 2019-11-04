@@ -1,15 +1,42 @@
 async function users(parent, args, context, info) {
-    const where = args.userId ? {
+  const where = args.filter
+    ? {
+        OR: [{ email_contains: args.filter }, { name_contains: args.filter }]
+      }
+    : {};
+
+  const count = await context.prisma
+    .usersConnection({
+      where
+    })
+    .aggregate()
+    .count();
+
+  const users = await context.prisma.users({
+    where,
+    first: args.first,
+    skip: args.skip,
+    orderBy: args.orderBy
+  });
+
+  return { count, users };
+}
+
+async function user(parent, args, context, info) {
+  const where = args.userId
+    ? {
         id: args.userId
-    } : args.email ? {
+      }
+    : args.email
+    ? {
         email: args.email
-    } : {}
+      }
+    : {};
 
-    const users = await context.prisma.users({where})
-
-    return users
+  return context.prisma.user(where);
 }
 
 module.exports = {
-    users,
-}
+  users,
+  user
+};

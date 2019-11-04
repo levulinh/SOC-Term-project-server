@@ -1,62 +1,79 @@
 scalar DateTime
 
+enum UserOrderByInput {
+  name_ASC
+  name_DESC
+  email_ASC
+  email_DESC
+}
+
 type Query {
-    info: String!
-    users(userId: ID, email: String): [User!]!
+  info: String!
+  users(
+    filter: String
+    first: Int
+    skip: Int
+    orderBy: UserOrderByInput
+  ): UserSearchEntry
+  user(userId: ID, email: String): User!
+}
+
+type UserSearchEntry {
+  users: [User!]!
+  count: Int!
 }
 
 type Mutation {
-    signup(email: String!, password: String!, name: String!): AuthPayload
-    login(email: String!, password: String!): AuthPayload
-    follow(followId: ID): Follow
-    unFollow(followId: ID): Follow
-    post(content: String!): Thought
-    love(thoughtId: ID!): Love
-    comment(thoughtId: ID!, content: String!): Comment
+  signup(email: String!, password: String!, name: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+  follow(followId: ID): Follow
+  unFollow(followId: ID): Follow
+  post(content: String!): Thought
+  love(thoughtId: ID!): Love
+  comment(thoughtId: ID!, content: String!): Comment
 }
 
 type AuthPayload {
-    token: String
-    user: User
+  token: String
+  user: User
 }
 
 type User {
-    id: ID!
-    name: String!
-    email: String!
-    followings: [Follow]
-    followers: [Follow]
-    thoughts: [Thought]
-    loves: [Love]
-    comments: [Comment!]!
+  id: ID!
+  name: String!
+  email: String!
+  followings: [Follow]
+  followers: [Follow]
+  thoughts: [Thought]
+  loves: [Love]
+  comments: [Comment!]!
 }
 
 type Thought {
-    id: ID!
-    content: String!
-    postedBy: User!
-    createdAt: DateTime!
-    loves: [Love]
-    comments: [Comment!]!
+  id: ID!
+  content: String!
+  postedBy: User!
+  createdAt: DateTime!
+  loves: [Love]
+  comments: [Comment!]!
 }
 
 type Comment {
-    id: ID!
-    content: String!
-    thought: Thought!
-    postedBy: User!
-    createdAt: DateTime!
+  id: ID!
+  content: String!
+  thought: Thought!
+  postedBy: User!
+  createdAt: DateTime!
 }
 
 type Follow {
-    id: ID!
-    user: User!
-    followedUser: User!
+  id: ID!
+  user: User!
+  followedUser: User!
 }
 
 type Love {
-    id: ID!
-    thought: Thought!
-    user: User!
+  id: ID!
+  thought: Thought!
+  user: User!
 }
-
