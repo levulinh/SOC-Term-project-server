@@ -1,40 +1,48 @@
+enum Gender {
+  MALE
+  FEMALE
+}
+
 type User {
-    id: ID! @id
-    name: String!
-    email: String! @unique
-    password: String!
-    followings: [Follow!]! @relation(name: "Followings")
-    followers: [Follow!]! @relation(name: "Followers")
-    thoughts: [Thought!]!
-    loves: [Love!]!
-    comments: [Comment!]!
+  id: ID! @id
+  name: String!
+  email: String! @unique
+  password: String!
+  username: String! @unique
+  moto: String!
+  gender: Gender!
+  followings: [Follow!]! @relation(name: "Followings")
+  followers: [Follow!]! @relation(name: "Followers")
+  thoughts: [Thought!]!
+  loves: [Love!]!
+  comments: [Comment!]!
 }
 
 type Thought {
-    id: ID! @id
-    postedBy: User!
-    createdAt: DateTime @createdAt
-    content: String!
-    loves: [Love!]!
-    comments: [Comment!]!
+  id: ID! @id
+  postedBy: User!
+  createdAt: DateTime @createdAt
+  content: String!
+  loves: [Love!]!
+  comments: [Comment!]!
 }
 
 type Comment {
-    id: ID! @id
-    createdAt: DateTime @createdAt
-    thought: Thought!
-    content: String!
-    postedBy: User!
+  id: ID! @id
+  createdAt: DateTime @createdAt
+  thought: Thought!
+  content: String!
+  postedBy: User!
 }
 
 type Follow {
-    id: ID! @id
-    user: User! @relation(name: "Followers")
-    followedUser: User! @relation(name: "Followings")
+  id: ID! @id
+  user: User! @relation(name: "Followers")
+  followedUser: User! @relation(name: "Followings")
 }
 
 type Love {
-    id: ID! @id
-    thought: Thought!
-    user: User!
+  id: ID! @id
+  thought: Thought!
+  user: User!
 }

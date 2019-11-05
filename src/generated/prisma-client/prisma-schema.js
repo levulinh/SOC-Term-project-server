@@ -448,6 +448,11 @@ input FollowWhereUniqueInput {
   id: ID
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 scalar Long
 
 type Love {
@@ -980,6 +985,9 @@ type User {
   name: String!
   email: String!
   password: String!
+  username: String!
+  moto: String!
+  gender: Gender!
   followings(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow!]
   followers(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow!]
   thoughts(where: ThoughtWhereInput, orderBy: ThoughtOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Thought!]
@@ -998,6 +1006,9 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
+  username: String!
+  moto: String!
+  gender: Gender!
   followings: FollowCreateManyWithoutFollowedUserInput
   followers: FollowCreateManyWithoutUserInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
@@ -1035,6 +1046,9 @@ input UserCreateWithoutCommentsInput {
   name: String!
   email: String!
   password: String!
+  username: String!
+  moto: String!
+  gender: Gender!
   followings: FollowCreateManyWithoutFollowedUserInput
   followers: FollowCreateManyWithoutUserInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
@@ -1046,6 +1060,9 @@ input UserCreateWithoutFollowersInput {
   name: String!
   email: String!
   password: String!
+  username: String!
+  moto: String!
+  gender: Gender!
   followings: FollowCreateManyWithoutFollowedUserInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
   loves: LoveCreateManyWithoutUserInput
@@ -1057,6 +1074,9 @@ input UserCreateWithoutFollowingsInput {
   name: String!
   email: String!
   password: String!
+  username: String!
+  moto: String!
+  gender: Gender!
   followers: FollowCreateManyWithoutUserInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
   loves: LoveCreateManyWithoutUserInput
@@ -1068,6 +1088,9 @@ input UserCreateWithoutLovesInput {
   name: String!
   email: String!
   password: String!
+  username: String!
+  moto: String!
+  gender: Gender!
   followings: FollowCreateManyWithoutFollowedUserInput
   followers: FollowCreateManyWithoutUserInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
@@ -1079,6 +1102,9 @@ input UserCreateWithoutThoughtsInput {
   name: String!
   email: String!
   password: String!
+  username: String!
+  moto: String!
+  gender: Gender!
   followings: FollowCreateManyWithoutFollowedUserInput
   followers: FollowCreateManyWithoutUserInput
   loves: LoveCreateManyWithoutUserInput
@@ -1099,6 +1125,12 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
+  username_ASC
+  username_DESC
+  moto_ASC
+  moto_DESC
+  gender_ASC
+  gender_DESC
 }
 
 type UserPreviousValues {
@@ -1106,6 +1138,9 @@ type UserPreviousValues {
   name: String!
   email: String!
   password: String!
+  username: String!
+  moto: String!
+  gender: Gender!
 }
 
 type UserSubscriptionPayload {
@@ -1130,6 +1165,9 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  username: String
+  moto: String
+  gender: Gender
   followings: FollowUpdateManyWithoutFollowedUserInput
   followers: FollowUpdateManyWithoutUserInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
@@ -1141,6 +1179,9 @@ input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
+  username: String
+  moto: String
+  gender: Gender
 }
 
 input UserUpdateOneRequiredWithoutCommentsInput {
@@ -1182,6 +1223,9 @@ input UserUpdateWithoutCommentsDataInput {
   name: String
   email: String
   password: String
+  username: String
+  moto: String
+  gender: Gender
   followings: FollowUpdateManyWithoutFollowedUserInput
   followers: FollowUpdateManyWithoutUserInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
@@ -1192,6 +1236,9 @@ input UserUpdateWithoutFollowersDataInput {
   name: String
   email: String
   password: String
+  username: String
+  moto: String
+  gender: Gender
   followings: FollowUpdateManyWithoutFollowedUserInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
   loves: LoveUpdateManyWithoutUserInput
@@ -1202,6 +1249,9 @@ input UserUpdateWithoutFollowingsDataInput {
   name: String
   email: String
   password: String
+  username: String
+  moto: String
+  gender: Gender
   followers: FollowUpdateManyWithoutUserInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
   loves: LoveUpdateManyWithoutUserInput
@@ -1212,6 +1262,9 @@ input UserUpdateWithoutLovesDataInput {
   name: String
   email: String
   password: String
+  username: String
+  moto: String
+  gender: Gender
   followings: FollowUpdateManyWithoutFollowedUserInput
   followers: FollowUpdateManyWithoutUserInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
@@ -1222,6 +1275,9 @@ input UserUpdateWithoutThoughtsDataInput {
   name: String
   email: String
   password: String
+  username: String
+  moto: String
+  gender: Gender
   followings: FollowUpdateManyWithoutFollowedUserInput
   followers: FollowUpdateManyWithoutUserInput
   loves: LoveUpdateManyWithoutUserInput
@@ -1310,6 +1366,38 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  username: String
+  username_not: String
+  username_in: [String!]
+  username_not_in: [String!]
+  username_lt: String
+  username_lte: String
+  username_gt: String
+  username_gte: String
+  username_contains: String
+  username_not_contains: String
+  username_starts_with: String
+  username_not_starts_with: String
+  username_ends_with: String
+  username_not_ends_with: String
+  moto: String
+  moto_not: String
+  moto_in: [String!]
+  moto_not_in: [String!]
+  moto_lt: String
+  moto_lte: String
+  moto_gt: String
+  moto_gte: String
+  moto_contains: String
+  moto_not_contains: String
+  moto_starts_with: String
+  moto_not_starts_with: String
+  moto_ends_with: String
+  moto_not_ends_with: String
+  gender: Gender
+  gender_not: Gender
+  gender_in: [Gender!]
+  gender_not_in: [Gender!]
   followings_every: FollowWhereInput
   followings_some: FollowWhereInput
   followings_none: FollowWhereInput
@@ -1333,6 +1421,7 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+  username: String
 }
 `
       }

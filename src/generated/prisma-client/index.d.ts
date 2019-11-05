@@ -251,6 +251,8 @@ export interface ClientConstructor<T> {
 
 export type FollowOrderByInput = "id_ASC" | "id_DESC";
 
+export type Gender = "MALE" | "FEMALE";
+
 export type ThoughtOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -277,15 +279,18 @@ export type UserOrderByInput =
   | "email_ASC"
   | "email_DESC"
   | "password_ASC"
-  | "password_DESC";
+  | "password_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "moto_ASC"
+  | "moto_DESC"
+  | "gender_ASC"
+  | "gender_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface UserUpdateOneRequiredWithoutFollowersInput {
-  create?: Maybe<UserCreateWithoutFollowersInput>;
-  update?: Maybe<UserUpdateWithoutFollowersDataInput>;
-  upsert?: Maybe<UserUpsertWithoutFollowersInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface FollowUpdateWithoutFollowedUserDataInput {
+  user?: Maybe<UserUpdateOneRequiredWithoutFollowersInput>;
 }
 
 export type CommentWhereUniqueInput = AtLeastOne<{
@@ -355,6 +360,38 @@ export interface UserWhereInput {
   password_not_starts_with?: Maybe<String>;
   password_ends_with?: Maybe<String>;
   password_not_ends_with?: Maybe<String>;
+  username?: Maybe<String>;
+  username_not?: Maybe<String>;
+  username_in?: Maybe<String[] | String>;
+  username_not_in?: Maybe<String[] | String>;
+  username_lt?: Maybe<String>;
+  username_lte?: Maybe<String>;
+  username_gt?: Maybe<String>;
+  username_gte?: Maybe<String>;
+  username_contains?: Maybe<String>;
+  username_not_contains?: Maybe<String>;
+  username_starts_with?: Maybe<String>;
+  username_not_starts_with?: Maybe<String>;
+  username_ends_with?: Maybe<String>;
+  username_not_ends_with?: Maybe<String>;
+  moto?: Maybe<String>;
+  moto_not?: Maybe<String>;
+  moto_in?: Maybe<String[] | String>;
+  moto_not_in?: Maybe<String[] | String>;
+  moto_lt?: Maybe<String>;
+  moto_lte?: Maybe<String>;
+  moto_gt?: Maybe<String>;
+  moto_gte?: Maybe<String>;
+  moto_contains?: Maybe<String>;
+  moto_not_contains?: Maybe<String>;
+  moto_starts_with?: Maybe<String>;
+  moto_not_starts_with?: Maybe<String>;
+  moto_ends_with?: Maybe<String>;
+  moto_not_ends_with?: Maybe<String>;
+  gender?: Maybe<Gender>;
+  gender_not?: Maybe<Gender>;
+  gender_in?: Maybe<Gender[] | Gender>;
+  gender_not_in?: Maybe<Gender[] | Gender>;
   followings_every?: Maybe<FollowWhereInput>;
   followings_some?: Maybe<FollowWhereInput>;
   followings_none?: Maybe<FollowWhereInput>;
@@ -448,6 +485,9 @@ export interface UserCreateWithoutCommentsInput {
   name: String;
   email: String;
   password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
   followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
   followers?: Maybe<FollowCreateManyWithoutUserInput>;
   thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
@@ -516,6 +556,9 @@ export interface UserUpdateManyMutationInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
 }
 
 export interface ThoughtUpdateWithoutCommentsDataInput {
@@ -529,6 +572,9 @@ export interface UserCreateInput {
   name: String;
   email: String;
   password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
   followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
   followers?: Maybe<FollowCreateManyWithoutUserInput>;
   thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
@@ -551,6 +597,9 @@ export interface UserUpdateWithoutThoughtsDataInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
   followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
   followers?: Maybe<FollowUpdateManyWithoutUserInput>;
   loves?: Maybe<LoveUpdateManyWithoutUserInput>;
@@ -600,8 +649,9 @@ export interface FollowUpdateInput {
   followedUser?: Maybe<UserUpdateOneRequiredWithoutFollowingsInput>;
 }
 
-export interface FollowUpdateWithoutFollowedUserDataInput {
-  user?: Maybe<UserUpdateOneRequiredWithoutFollowersInput>;
+export interface ThoughtUpdateManyWithWhereNestedInput {
+  where: ThoughtScalarWhereInput;
+  data: ThoughtUpdateManyDataInput;
 }
 
 export interface FollowCreateInput {
@@ -610,9 +660,11 @@ export interface FollowCreateInput {
   followedUser: UserCreateOneWithoutFollowingsInput;
 }
 
-export interface ThoughtUpdateManyWithWhereNestedInput {
-  where: ThoughtScalarWhereInput;
-  data: ThoughtUpdateManyDataInput;
+export interface UserUpdateOneRequiredWithoutFollowersInput {
+  create?: Maybe<UserCreateWithoutFollowersInput>;
+  update?: Maybe<UserUpdateWithoutFollowersDataInput>;
+  upsert?: Maybe<UserUpsertWithoutFollowersInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
 }
 
 export interface ThoughtUpsertWithoutCommentsInput {
@@ -624,6 +676,9 @@ export interface UserUpdateWithoutFollowersDataInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
   followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
   thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
   loves?: Maybe<LoveUpdateManyWithoutUserInput>;
@@ -857,6 +912,9 @@ export interface UserUpdateWithoutLovesDataInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
   followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
   followers?: Maybe<FollowUpdateManyWithoutUserInput>;
   thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
@@ -925,6 +983,9 @@ export interface UserUpdateWithoutFollowingsDataInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
   followers?: Maybe<FollowUpdateManyWithoutUserInput>;
   thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
   loves?: Maybe<LoveUpdateManyWithoutUserInput>;
@@ -984,6 +1045,9 @@ export interface UserUpdateInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
   followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
   followers?: Maybe<FollowUpdateManyWithoutUserInput>;
   thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
@@ -1079,6 +1143,9 @@ export interface UserCreateWithoutThoughtsInput {
   name: String;
   email: String;
   password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
   followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
   followers?: Maybe<FollowCreateManyWithoutUserInput>;
   loves?: Maybe<LoveCreateManyWithoutUserInput>;
@@ -1089,6 +1156,9 @@ export interface UserUpdateWithoutCommentsDataInput {
   name?: Maybe<String>;
   email?: Maybe<String>;
   password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
   followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
   followers?: Maybe<FollowUpdateManyWithoutUserInput>;
   thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
@@ -1100,6 +1170,9 @@ export interface UserCreateWithoutFollowersInput {
   name: String;
   email: String;
   password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
   followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
   thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
   loves?: Maybe<LoveCreateManyWithoutUserInput>;
@@ -1218,6 +1291,7 @@ export interface LoveUpsertWithWhereUniqueWithoutUserInput {
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   email?: Maybe<String>;
+  username?: Maybe<String>;
 }>;
 
 export interface LoveScalarWhereInput {
@@ -1287,6 +1361,9 @@ export interface UserCreateWithoutFollowingsInput {
   name: String;
   email: String;
   password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
   followers?: Maybe<FollowCreateManyWithoutUserInput>;
   thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
   loves?: Maybe<LoveCreateManyWithoutUserInput>;
@@ -1375,6 +1452,9 @@ export interface UserCreateWithoutLovesInput {
   name: String;
   email: String;
   password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
   followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
   followers?: Maybe<FollowCreateManyWithoutUserInput>;
   thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
@@ -1395,6 +1475,9 @@ export interface UserPreviousValues {
   name: String;
   email: String;
   password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
 }
 
 export interface UserPreviousValuesPromise
@@ -1404,6 +1487,9 @@ export interface UserPreviousValuesPromise
   name: () => Promise<String>;
   email: () => Promise<String>;
   password: () => Promise<String>;
+  username: () => Promise<String>;
+  moto: () => Promise<String>;
+  gender: () => Promise<Gender>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -1413,6 +1499,9 @@ export interface UserPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  moto: () => Promise<AsyncIterator<String>>;
+  gender: () => Promise<AsyncIterator<Gender>>;
 }
 
 export interface AggregateComment {
@@ -2059,6 +2148,9 @@ export interface User {
   name: String;
   email: String;
   password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -2066,6 +2158,9 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   name: () => Promise<String>;
   email: () => Promise<String>;
   password: () => Promise<String>;
+  username: () => Promise<String>;
+  moto: () => Promise<String>;
+  gender: () => Promise<Gender>;
   followings: <T = FragmentableArray<Follow>>(args?: {
     where?: FollowWhereInput;
     orderBy?: FollowOrderByInput;
@@ -2120,6 +2215,9 @@ export interface UserSubscription
   name: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  moto: () => Promise<AsyncIterator<String>>;
+  gender: () => Promise<AsyncIterator<Gender>>;
   followings: <T = Promise<AsyncIterator<FollowSubscription>>>(args?: {
     where?: FollowWhereInput;
     orderBy?: FollowOrderByInput;
@@ -2174,6 +2272,9 @@ export interface UserNullablePromise
   name: () => Promise<String>;
   email: () => Promise<String>;
   password: () => Promise<String>;
+  username: () => Promise<String>;
+  moto: () => Promise<String>;
+  gender: () => Promise<Gender>;
   followings: <T = FragmentableArray<Follow>>(args?: {
     where?: FollowWhereInput;
     orderBy?: FollowOrderByInput;
@@ -2301,6 +2402,10 @@ export type Boolean = boolean;
  */
 
 export const models: Model[] = [
+  {
+    name: "Gender",
+    embedded: false
+  },
   {
     name: "User",
     embedded: false

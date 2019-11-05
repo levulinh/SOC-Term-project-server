@@ -7,6 +7,11 @@ enum UserOrderByInput {
   email_DESC
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 type Query {
   info: String!
   users(
@@ -24,7 +29,14 @@ type UserSearchEntry {
 }
 
 type Mutation {
-  signup(email: String!, password: String!, name: String!): AuthPayload
+  signup(
+    email: String!
+    password: String!
+    name: String!
+    username: String!
+    gender: Gender
+    moto: String
+  ): AuthPayload
   login(email: String!, password: String!): AuthPayload
   follow(followId: ID): Follow
   unFollow(followId: ID): Follow
@@ -42,6 +54,9 @@ type User {
   id: ID!
   name: String!
   email: String!
+  username: String!
+  moto: String
+  gender: Gender
   followings: [Follow]
   followers: [Follow]
   thoughts: [Thought]

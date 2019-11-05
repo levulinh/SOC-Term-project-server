@@ -5,6 +5,10 @@ var typeDefs = require("./prisma-schema").typeDefs;
 
 var models = [
   {
+    name: "Gender",
+    embedded: false
+  },
+  {
     name: "User",
     embedded: false
   },
@@ -28,6 +32,6 @@ var models = [
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `https://us1.prisma.sh/linh-le-vu-c4ac54/term-proj/dev`
+  endpoint: `https://us1.prisma.sh/linh-le-vu-c4ac54/server/dev`
 });
 exports.prisma = new exports.Prisma();
