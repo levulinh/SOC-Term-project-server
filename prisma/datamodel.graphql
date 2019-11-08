@@ -11,8 +11,8 @@ type User {
   username: String! @unique
   moto: String!
   gender: Gender!
-  followings: [Follow!]! @relation(name: "Followings")
-  followers: [Follow!]! @relation(name: "Followers")
+  followings: [User!]! @relation(name: "Followings")
+  followers: [User!]! @relation(name: "Followers")
   thoughts: [Thought!]!
   loves: [Love!]!
   comments: [Comment!]!
@@ -33,12 +33,6 @@ type Comment {
   thought: Thought!
   content: String!
   postedBy: User!
-}
-
-type Follow {
-  id: ID! @id
-  user: User! @relation(name: "Followers")
-  followedUser: User! @relation(name: "Followings")
 }
 
 type Love {

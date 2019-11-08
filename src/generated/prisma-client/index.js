@@ -21,10 +21,6 @@ var models = [
     embedded: false
   },
   {
-    name: "Follow",
-    embedded: false
-  },
-  {
     name: "Love",
     embedded: false
   }
@@ -32,6 +28,6 @@ var models = [
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `https://us1.prisma.sh/linh-le-vu-c4ac54/server/dev`
+  endpoint: `https://us1.prisma.sh/linh-le-vu-c4ac54/socialnet/dev`
 });
 exports.prisma = new exports.Prisma();

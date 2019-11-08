@@ -6,7 +6,6 @@ const Mutation = require('./resolvers/Mutation')
 const User = require('./resolvers/User')
 const Thought = require('./resolvers/Thought')
 const Comment = require('./resolvers/Comment')
-const Follow = require('./resolvers/Follow')
 const Love = require('./resolvers/Love')
 
 const resolvers = {
@@ -15,7 +14,6 @@ const resolvers = {
     User,
     Thought,
     Comment,
-    Follow,
     Love
 }
 

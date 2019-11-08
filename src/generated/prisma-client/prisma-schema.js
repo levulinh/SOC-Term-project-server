@@ -7,10 +7,6 @@ module.exports = {
   count: Int!
 }
 
-type AggregateFollow {
-  count: Int!
-}
-
 type AggregateLove {
   count: Int!
 }
@@ -275,179 +271,6 @@ input CommentWhereUniqueInput {
 
 scalar DateTime
 
-type Follow {
-  id: ID!
-  user: User!
-  followedUser: User!
-}
-
-type FollowConnection {
-  pageInfo: PageInfo!
-  edges: [FollowEdge]!
-  aggregate: AggregateFollow!
-}
-
-input FollowCreateInput {
-  id: ID
-  user: UserCreateOneWithoutFollowersInput!
-  followedUser: UserCreateOneWithoutFollowingsInput!
-}
-
-input FollowCreateManyWithoutFollowedUserInput {
-  create: [FollowCreateWithoutFollowedUserInput!]
-  connect: [FollowWhereUniqueInput!]
-}
-
-input FollowCreateManyWithoutUserInput {
-  create: [FollowCreateWithoutUserInput!]
-  connect: [FollowWhereUniqueInput!]
-}
-
-input FollowCreateWithoutFollowedUserInput {
-  id: ID
-  user: UserCreateOneWithoutFollowersInput!
-}
-
-input FollowCreateWithoutUserInput {
-  id: ID
-  followedUser: UserCreateOneWithoutFollowingsInput!
-}
-
-type FollowEdge {
-  node: Follow!
-  cursor: String!
-}
-
-enum FollowOrderByInput {
-  id_ASC
-  id_DESC
-}
-
-type FollowPreviousValues {
-  id: ID!
-}
-
-input FollowScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  AND: [FollowScalarWhereInput!]
-  OR: [FollowScalarWhereInput!]
-  NOT: [FollowScalarWhereInput!]
-}
-
-type FollowSubscriptionPayload {
-  mutation: MutationType!
-  node: Follow
-  updatedFields: [String!]
-  previousValues: FollowPreviousValues
-}
-
-input FollowSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: FollowWhereInput
-  AND: [FollowSubscriptionWhereInput!]
-  OR: [FollowSubscriptionWhereInput!]
-  NOT: [FollowSubscriptionWhereInput!]
-}
-
-input FollowUpdateInput {
-  user: UserUpdateOneRequiredWithoutFollowersInput
-  followedUser: UserUpdateOneRequiredWithoutFollowingsInput
-}
-
-input FollowUpdateManyWithoutFollowedUserInput {
-  create: [FollowCreateWithoutFollowedUserInput!]
-  delete: [FollowWhereUniqueInput!]
-  connect: [FollowWhereUniqueInput!]
-  set: [FollowWhereUniqueInput!]
-  disconnect: [FollowWhereUniqueInput!]
-  update: [FollowUpdateWithWhereUniqueWithoutFollowedUserInput!]
-  upsert: [FollowUpsertWithWhereUniqueWithoutFollowedUserInput!]
-  deleteMany: [FollowScalarWhereInput!]
-}
-
-input FollowUpdateManyWithoutUserInput {
-  create: [FollowCreateWithoutUserInput!]
-  delete: [FollowWhereUniqueInput!]
-  connect: [FollowWhereUniqueInput!]
-  set: [FollowWhereUniqueInput!]
-  disconnect: [FollowWhereUniqueInput!]
-  update: [FollowUpdateWithWhereUniqueWithoutUserInput!]
-  upsert: [FollowUpsertWithWhereUniqueWithoutUserInput!]
-  deleteMany: [FollowScalarWhereInput!]
-}
-
-input FollowUpdateWithoutFollowedUserDataInput {
-  user: UserUpdateOneRequiredWithoutFollowersInput
-}
-
-input FollowUpdateWithoutUserDataInput {
-  followedUser: UserUpdateOneRequiredWithoutFollowingsInput
-}
-
-input FollowUpdateWithWhereUniqueWithoutFollowedUserInput {
-  where: FollowWhereUniqueInput!
-  data: FollowUpdateWithoutFollowedUserDataInput!
-}
-
-input FollowUpdateWithWhereUniqueWithoutUserInput {
-  where: FollowWhereUniqueInput!
-  data: FollowUpdateWithoutUserDataInput!
-}
-
-input FollowUpsertWithWhereUniqueWithoutFollowedUserInput {
-  where: FollowWhereUniqueInput!
-  update: FollowUpdateWithoutFollowedUserDataInput!
-  create: FollowCreateWithoutFollowedUserInput!
-}
-
-input FollowUpsertWithWhereUniqueWithoutUserInput {
-  where: FollowWhereUniqueInput!
-  update: FollowUpdateWithoutUserDataInput!
-  create: FollowCreateWithoutUserInput!
-}
-
-input FollowWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  user: UserWhereInput
-  followedUser: UserWhereInput
-  AND: [FollowWhereInput!]
-  OR: [FollowWhereInput!]
-  NOT: [FollowWhereInput!]
-}
-
-input FollowWhereUniqueInput {
-  id: ID
-}
-
 enum Gender {
   MALE
   FEMALE
@@ -635,11 +458,6 @@ type Mutation {
   upsertComment(where: CommentWhereUniqueInput!, create: CommentCreateInput!, update: CommentUpdateInput!): Comment!
   deleteComment(where: CommentWhereUniqueInput!): Comment
   deleteManyComments(where: CommentWhereInput): BatchPayload!
-  createFollow(data: FollowCreateInput!): Follow!
-  updateFollow(data: FollowUpdateInput!, where: FollowWhereUniqueInput!): Follow
-  upsertFollow(where: FollowWhereUniqueInput!, create: FollowCreateInput!, update: FollowUpdateInput!): Follow!
-  deleteFollow(where: FollowWhereUniqueInput!): Follow
-  deleteManyFollows(where: FollowWhereInput): BatchPayload!
   createLove(data: LoveCreateInput!): Love!
   updateLove(data: LoveUpdateInput!, where: LoveWhereUniqueInput!): Love
   upsertLove(where: LoveWhereUniqueInput!, create: LoveCreateInput!, update: LoveUpdateInput!): Love!
@@ -680,9 +498,6 @@ type Query {
   comment(where: CommentWhereUniqueInput!): Comment
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
   commentsConnection(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CommentConnection!
-  follow(where: FollowWhereUniqueInput!): Follow
-  follows(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow]!
-  followsConnection(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FollowConnection!
   love(where: LoveWhereUniqueInput!): Love
   loves(where: LoveWhereInput, orderBy: LoveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Love]!
   lovesConnection(where: LoveWhereInput, orderBy: LoveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LoveConnection!
@@ -697,7 +512,6 @@ type Query {
 
 type Subscription {
   comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
-  follow(where: FollowSubscriptionWhereInput): FollowSubscriptionPayload
   love(where: LoveSubscriptionWhereInput): LoveSubscriptionPayload
   thought(where: ThoughtSubscriptionWhereInput): ThoughtSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
@@ -988,8 +802,8 @@ type User {
   username: String!
   moto: String!
   gender: Gender!
-  followings(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow!]
-  followers(where: FollowWhereInput, orderBy: FollowOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Follow!]
+  followings(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  followers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   thoughts(where: ThoughtWhereInput, orderBy: ThoughtOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Thought!]
   loves(where: LoveWhereInput, orderBy: LoveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Love!]
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
@@ -1009,25 +823,25 @@ input UserCreateInput {
   username: String!
   moto: String!
   gender: Gender!
-  followings: FollowCreateManyWithoutFollowedUserInput
-  followers: FollowCreateManyWithoutUserInput
+  followings: UserCreateManyWithoutFollowingsInput
+  followers: UserCreateManyWithoutFollowersInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
   loves: LoveCreateManyWithoutUserInput
   comments: CommentCreateManyWithoutPostedByInput
 }
 
+input UserCreateManyWithoutFollowersInput {
+  create: [UserCreateWithoutFollowersInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutFollowingsInput {
+  create: [UserCreateWithoutFollowingsInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
 input UserCreateOneWithoutCommentsInput {
   create: UserCreateWithoutCommentsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutFollowersInput {
-  create: UserCreateWithoutFollowersInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutFollowingsInput {
-  create: UserCreateWithoutFollowingsInput
   connect: UserWhereUniqueInput
 }
 
@@ -1049,8 +863,8 @@ input UserCreateWithoutCommentsInput {
   username: String!
   moto: String!
   gender: Gender!
-  followings: FollowCreateManyWithoutFollowedUserInput
-  followers: FollowCreateManyWithoutUserInput
+  followings: UserCreateManyWithoutFollowingsInput
+  followers: UserCreateManyWithoutFollowersInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
   loves: LoveCreateManyWithoutUserInput
 }
@@ -1063,7 +877,7 @@ input UserCreateWithoutFollowersInput {
   username: String!
   moto: String!
   gender: Gender!
-  followings: FollowCreateManyWithoutFollowedUserInput
+  followings: UserCreateManyWithoutFollowingsInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
   loves: LoveCreateManyWithoutUserInput
   comments: CommentCreateManyWithoutPostedByInput
@@ -1077,7 +891,7 @@ input UserCreateWithoutFollowingsInput {
   username: String!
   moto: String!
   gender: Gender!
-  followers: FollowCreateManyWithoutUserInput
+  followers: UserCreateManyWithoutFollowersInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
   loves: LoveCreateManyWithoutUserInput
   comments: CommentCreateManyWithoutPostedByInput
@@ -1091,8 +905,8 @@ input UserCreateWithoutLovesInput {
   username: String!
   moto: String!
   gender: Gender!
-  followings: FollowCreateManyWithoutFollowedUserInput
-  followers: FollowCreateManyWithoutUserInput
+  followings: UserCreateManyWithoutFollowingsInput
+  followers: UserCreateManyWithoutFollowersInput
   thoughts: ThoughtCreateManyWithoutPostedByInput
   comments: CommentCreateManyWithoutPostedByInput
 }
@@ -1105,8 +919,8 @@ input UserCreateWithoutThoughtsInput {
   username: String!
   moto: String!
   gender: Gender!
-  followings: FollowCreateManyWithoutFollowedUserInput
-  followers: FollowCreateManyWithoutUserInput
+  followings: UserCreateManyWithoutFollowingsInput
+  followers: UserCreateManyWithoutFollowersInput
   loves: LoveCreateManyWithoutUserInput
   comments: CommentCreateManyWithoutPostedByInput
 }
@@ -1143,6 +957,100 @@ type UserPreviousValues {
   gender: Gender!
 }
 
+input UserScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
+  username: String
+  username_not: String
+  username_in: [String!]
+  username_not_in: [String!]
+  username_lt: String
+  username_lte: String
+  username_gt: String
+  username_gte: String
+  username_contains: String
+  username_not_contains: String
+  username_starts_with: String
+  username_not_starts_with: String
+  username_ends_with: String
+  username_not_ends_with: String
+  moto: String
+  moto_not: String
+  moto_in: [String!]
+  moto_not_in: [String!]
+  moto_lt: String
+  moto_lte: String
+  moto_gt: String
+  moto_gte: String
+  moto_contains: String
+  moto_not_contains: String
+  moto_starts_with: String
+  moto_not_starts_with: String
+  moto_ends_with: String
+  moto_not_ends_with: String
+  gender: Gender
+  gender_not: Gender
+  gender_in: [Gender!]
+  gender_not_in: [Gender!]
+  AND: [UserScalarWhereInput!]
+  OR: [UserScalarWhereInput!]
+  NOT: [UserScalarWhereInput!]
+}
+
 type UserSubscriptionPayload {
   mutation: MutationType!
   node: User
@@ -1168,11 +1076,20 @@ input UserUpdateInput {
   username: String
   moto: String
   gender: Gender
-  followings: FollowUpdateManyWithoutFollowedUserInput
-  followers: FollowUpdateManyWithoutUserInput
+  followings: UserUpdateManyWithoutFollowingsInput
+  followers: UserUpdateManyWithoutFollowersInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
   loves: LoveUpdateManyWithoutUserInput
   comments: CommentUpdateManyWithoutPostedByInput
+}
+
+input UserUpdateManyDataInput {
+  name: String
+  email: String
+  password: String
+  username: String
+  moto: String
+  gender: Gender
 }
 
 input UserUpdateManyMutationInput {
@@ -1184,24 +1101,39 @@ input UserUpdateManyMutationInput {
   gender: Gender
 }
 
+input UserUpdateManyWithoutFollowersInput {
+  create: [UserCreateWithoutFollowersInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutFollowersInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutFollowersInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithoutFollowingsInput {
+  create: [UserCreateWithoutFollowingsInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutFollowingsInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutFollowingsInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
+}
+
 input UserUpdateOneRequiredWithoutCommentsInput {
   create: UserCreateWithoutCommentsInput
   update: UserUpdateWithoutCommentsDataInput
   upsert: UserUpsertWithoutCommentsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserUpdateOneRequiredWithoutFollowersInput {
-  create: UserCreateWithoutFollowersInput
-  update: UserUpdateWithoutFollowersDataInput
-  upsert: UserUpsertWithoutFollowersInput
-  connect: UserWhereUniqueInput
-}
-
-input UserUpdateOneRequiredWithoutFollowingsInput {
-  create: UserCreateWithoutFollowingsInput
-  update: UserUpdateWithoutFollowingsDataInput
-  upsert: UserUpsertWithoutFollowingsInput
   connect: UserWhereUniqueInput
 }
 
@@ -1226,8 +1158,8 @@ input UserUpdateWithoutCommentsDataInput {
   username: String
   moto: String
   gender: Gender
-  followings: FollowUpdateManyWithoutFollowedUserInput
-  followers: FollowUpdateManyWithoutUserInput
+  followings: UserUpdateManyWithoutFollowingsInput
+  followers: UserUpdateManyWithoutFollowersInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
   loves: LoveUpdateManyWithoutUserInput
 }
@@ -1239,7 +1171,7 @@ input UserUpdateWithoutFollowersDataInput {
   username: String
   moto: String
   gender: Gender
-  followings: FollowUpdateManyWithoutFollowedUserInput
+  followings: UserUpdateManyWithoutFollowingsInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
   loves: LoveUpdateManyWithoutUserInput
   comments: CommentUpdateManyWithoutPostedByInput
@@ -1252,7 +1184,7 @@ input UserUpdateWithoutFollowingsDataInput {
   username: String
   moto: String
   gender: Gender
-  followers: FollowUpdateManyWithoutUserInput
+  followers: UserUpdateManyWithoutFollowersInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
   loves: LoveUpdateManyWithoutUserInput
   comments: CommentUpdateManyWithoutPostedByInput
@@ -1265,8 +1197,8 @@ input UserUpdateWithoutLovesDataInput {
   username: String
   moto: String
   gender: Gender
-  followings: FollowUpdateManyWithoutFollowedUserInput
-  followers: FollowUpdateManyWithoutUserInput
+  followings: UserUpdateManyWithoutFollowingsInput
+  followers: UserUpdateManyWithoutFollowersInput
   thoughts: ThoughtUpdateManyWithoutPostedByInput
   comments: CommentUpdateManyWithoutPostedByInput
 }
@@ -1278,25 +1210,25 @@ input UserUpdateWithoutThoughtsDataInput {
   username: String
   moto: String
   gender: Gender
-  followings: FollowUpdateManyWithoutFollowedUserInput
-  followers: FollowUpdateManyWithoutUserInput
+  followings: UserUpdateManyWithoutFollowingsInput
+  followers: UserUpdateManyWithoutFollowersInput
   loves: LoveUpdateManyWithoutUserInput
   comments: CommentUpdateManyWithoutPostedByInput
+}
+
+input UserUpdateWithWhereUniqueWithoutFollowersInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutFollowersDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutFollowingsInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutFollowingsDataInput!
 }
 
 input UserUpsertWithoutCommentsInput {
   update: UserUpdateWithoutCommentsDataInput!
   create: UserCreateWithoutCommentsInput!
-}
-
-input UserUpsertWithoutFollowersInput {
-  update: UserUpdateWithoutFollowersDataInput!
-  create: UserCreateWithoutFollowersInput!
-}
-
-input UserUpsertWithoutFollowingsInput {
-  update: UserUpdateWithoutFollowingsDataInput!
-  create: UserCreateWithoutFollowingsInput!
 }
 
 input UserUpsertWithoutLovesInput {
@@ -1307,6 +1239,18 @@ input UserUpsertWithoutLovesInput {
 input UserUpsertWithoutThoughtsInput {
   update: UserUpdateWithoutThoughtsDataInput!
   create: UserCreateWithoutThoughtsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutFollowersInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutFollowersDataInput!
+  create: UserCreateWithoutFollowersInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutFollowingsInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutFollowingsDataInput!
+  create: UserCreateWithoutFollowingsInput!
 }
 
 input UserWhereInput {
@@ -1398,12 +1342,12 @@ input UserWhereInput {
   gender_not: Gender
   gender_in: [Gender!]
   gender_not_in: [Gender!]
-  followings_every: FollowWhereInput
-  followings_some: FollowWhereInput
-  followings_none: FollowWhereInput
-  followers_every: FollowWhereInput
-  followers_some: FollowWhereInput
-  followers_none: FollowWhereInput
+  followings_every: UserWhereInput
+  followings_some: UserWhereInput
+  followings_none: UserWhereInput
+  followers_every: UserWhereInput
+  followers_some: UserWhereInput
+  followers_none: UserWhereInput
   thoughts_every: ThoughtWhereInput
   thoughts_some: ThoughtWhereInput
   thoughts_none: ThoughtWhereInput

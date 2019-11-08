@@ -7,6 +7,11 @@ enum UserOrderByInput {
   email_DESC
 }
 
+enum ThoughtOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+}
+
 enum Gender {
   MALE
   FEMALE
@@ -21,6 +26,11 @@ type Query {
     orderBy: UserOrderByInput
   ): UserSearchEntry
   user(userId: ID, email: String): User!
+  userEntry(userId: ID, email: String): UserEntry!
+}
+
+type UserEntry {
+
 }
 
 type UserSearchEntry {
@@ -38,8 +48,8 @@ type Mutation {
     moto: String
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
-  follow(followId: ID): Follow
-  unFollow(followId: ID): Follow
+  follow(followId: ID): User
+  unFollow(followId: ID): User
   post(content: String!): Thought
   love(thoughtId: ID!): Love
   comment(thoughtId: ID!, content: String!): Comment
@@ -57,8 +67,8 @@ type User {
   username: String!
   moto: String
   gender: Gender
-  followings: [Follow]
-  followers: [Follow]
+  followings: [User]
+  followers: [User]
   thoughts: [Thought]
   loves: [Love]
   comments: [Comment!]!
@@ -79,12 +89,6 @@ type Comment {
   thought: Thought!
   postedBy: User!
   createdAt: DateTime!
-}
-
-type Follow {
-  id: ID!
-  user: User!
-  followedUser: User!
 }
 
 type Love {

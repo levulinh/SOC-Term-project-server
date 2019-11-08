@@ -17,7 +17,6 @@ export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
   comment: (where?: CommentWhereInput) => Promise<boolean>;
-  follow: (where?: FollowWhereInput) => Promise<boolean>;
   love: (where?: LoveWhereInput) => Promise<boolean>;
   thought: (where?: ThoughtWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
@@ -61,25 +60,6 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => CommentConnectionPromise;
-  follow: (where: FollowWhereUniqueInput) => FollowNullablePromise;
-  follows: (args?: {
-    where?: FollowWhereInput;
-    orderBy?: FollowOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Follow>;
-  followsConnection: (args?: {
-    where?: FollowWhereInput;
-    orderBy?: FollowOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FollowConnectionPromise;
   love: (where: LoveWhereUniqueInput) => LoveNullablePromise;
   loves: (args?: {
     where?: LoveWhereInput;
@@ -159,18 +139,6 @@ export interface Prisma {
   }) => CommentPromise;
   deleteComment: (where: CommentWhereUniqueInput) => CommentPromise;
   deleteManyComments: (where?: CommentWhereInput) => BatchPayloadPromise;
-  createFollow: (data: FollowCreateInput) => FollowPromise;
-  updateFollow: (args: {
-    data: FollowUpdateInput;
-    where: FollowWhereUniqueInput;
-  }) => FollowPromise;
-  upsertFollow: (args: {
-    where: FollowWhereUniqueInput;
-    create: FollowCreateInput;
-    update: FollowUpdateInput;
-  }) => FollowPromise;
-  deleteFollow: (where: FollowWhereUniqueInput) => FollowPromise;
-  deleteManyFollows: (where?: FollowWhereInput) => BatchPayloadPromise;
   createLove: (data: LoveCreateInput) => LovePromise;
   updateLove: (args: {
     data: LoveUpdateInput;
@@ -227,9 +195,6 @@ export interface Subscription {
   comment: (
     where?: CommentSubscriptionWhereInput
   ) => CommentSubscriptionPayloadSubscription;
-  follow: (
-    where?: FollowSubscriptionWhereInput
-  ) => FollowSubscriptionPayloadSubscription;
   love: (
     where?: LoveSubscriptionWhereInput
   ) => LoveSubscriptionPayloadSubscription;
@@ -249,9 +214,23 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type FollowOrderByInput = "id_ASC" | "id_DESC";
-
 export type Gender = "MALE" | "FEMALE";
+
+export type UserOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "email_ASC"
+  | "email_DESC"
+  | "password_ASC"
+  | "password_DESC"
+  | "username_ASC"
+  | "username_DESC"
+  | "moto_ASC"
+  | "moto_DESC"
+  | "gender_ASC"
+  | "gender_DESC";
 
 export type ThoughtOrderByInput =
   | "id_ASC"
@@ -271,37 +250,11 @@ export type CommentOrderByInput =
   | "content_ASC"
   | "content_DESC";
 
-export type UserOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "email_ASC"
-  | "email_DESC"
-  | "password_ASC"
-  | "password_DESC"
-  | "username_ASC"
-  | "username_DESC"
-  | "moto_ASC"
-  | "moto_DESC"
-  | "gender_ASC"
-  | "gender_DESC";
-
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
-
-export interface FollowUpdateWithoutFollowedUserDataInput {
-  user?: Maybe<UserUpdateOneRequiredWithoutFollowersInput>;
-}
 
 export type CommentWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
-
-export interface ThoughtUpdateWithoutPostedByDataInput {
-  content?: Maybe<String>;
-  loves?: Maybe<LoveUpdateManyWithoutThoughtInput>;
-  comments?: Maybe<CommentUpdateManyWithoutThoughtInput>;
-}
 
 export interface UserWhereInput {
   id?: Maybe<ID_Input>;
@@ -392,12 +345,12 @@ export interface UserWhereInput {
   gender_not?: Maybe<Gender>;
   gender_in?: Maybe<Gender[] | Gender>;
   gender_not_in?: Maybe<Gender[] | Gender>;
-  followings_every?: Maybe<FollowWhereInput>;
-  followings_some?: Maybe<FollowWhereInput>;
-  followings_none?: Maybe<FollowWhereInput>;
-  followers_every?: Maybe<FollowWhereInput>;
-  followers_some?: Maybe<FollowWhereInput>;
-  followers_none?: Maybe<FollowWhereInput>;
+  followings_every?: Maybe<UserWhereInput>;
+  followings_some?: Maybe<UserWhereInput>;
+  followings_none?: Maybe<UserWhereInput>;
+  followers_every?: Maybe<UserWhereInput>;
+  followers_some?: Maybe<UserWhereInput>;
+  followers_none?: Maybe<UserWhereInput>;
   thoughts_every?: Maybe<ThoughtWhereInput>;
   thoughts_some?: Maybe<ThoughtWhereInput>;
   thoughts_none?: Maybe<ThoughtWhereInput>;
@@ -410,322 +363,6 @@ export interface UserWhereInput {
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
-}
-
-export interface LoveUpdateManyWithoutThoughtInput {
-  create?: Maybe<
-    LoveCreateWithoutThoughtInput[] | LoveCreateWithoutThoughtInput
-  >;
-  delete?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-  connect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-  set?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-  disconnect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-  update?: Maybe<
-    | LoveUpdateWithWhereUniqueWithoutThoughtInput[]
-    | LoveUpdateWithWhereUniqueWithoutThoughtInput
-  >;
-  upsert?: Maybe<
-    | LoveUpsertWithWhereUniqueWithoutThoughtInput[]
-    | LoveUpsertWithWhereUniqueWithoutThoughtInput
-  >;
-  deleteMany?: Maybe<LoveScalarWhereInput[] | LoveScalarWhereInput>;
-}
-
-export interface LoveWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  thought?: Maybe<ThoughtWhereInput>;
-  user?: Maybe<UserWhereInput>;
-  AND?: Maybe<LoveWhereInput[] | LoveWhereInput>;
-  OR?: Maybe<LoveWhereInput[] | LoveWhereInput>;
-  NOT?: Maybe<LoveWhereInput[] | LoveWhereInput>;
-}
-
-export interface LoveUpdateWithWhereUniqueWithoutThoughtInput {
-  where: LoveWhereUniqueInput;
-  data: LoveUpdateWithoutThoughtDataInput;
-}
-
-export interface FollowWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  user?: Maybe<UserWhereInput>;
-  followedUser?: Maybe<UserWhereInput>;
-  AND?: Maybe<FollowWhereInput[] | FollowWhereInput>;
-  OR?: Maybe<FollowWhereInput[] | FollowWhereInput>;
-  NOT?: Maybe<FollowWhereInput[] | FollowWhereInput>;
-}
-
-export interface UserCreateWithoutCommentsInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  email: String;
-  password: String;
-  username: String;
-  moto: String;
-  gender: Gender;
-  followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
-  followers?: Maybe<FollowCreateManyWithoutUserInput>;
-  thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
-  loves?: Maybe<LoveCreateManyWithoutUserInput>;
-}
-
-export interface LoveUpsertWithWhereUniqueWithoutThoughtInput {
-  where: LoveWhereUniqueInput;
-  update: LoveUpdateWithoutThoughtDataInput;
-  create: LoveCreateWithoutThoughtInput;
-}
-
-export interface CommentCreateManyWithoutPostedByInput {
-  create?: Maybe<
-    CommentCreateWithoutPostedByInput[] | CommentCreateWithoutPostedByInput
-  >;
-  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-}
-
-export interface LoveUpdateWithoutThoughtDataInput {
-  user?: Maybe<UserUpdateOneRequiredWithoutLovesInput>;
-}
-
-export interface CommentCreateWithoutPostedByInput {
-  id?: Maybe<ID_Input>;
-  thought: ThoughtCreateOneWithoutCommentsInput;
-  content: String;
-}
-
-export interface ThoughtSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<ThoughtWhereInput>;
-  AND?: Maybe<ThoughtSubscriptionWhereInput[] | ThoughtSubscriptionWhereInput>;
-  OR?: Maybe<ThoughtSubscriptionWhereInput[] | ThoughtSubscriptionWhereInput>;
-  NOT?: Maybe<ThoughtSubscriptionWhereInput[] | ThoughtSubscriptionWhereInput>;
-}
-
-export interface CommentUpdateInput {
-  thought?: Maybe<ThoughtUpdateOneRequiredWithoutCommentsInput>;
-  content?: Maybe<String>;
-  postedBy?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
-}
-
-export interface FollowSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<FollowWhereInput>;
-  AND?: Maybe<FollowSubscriptionWhereInput[] | FollowSubscriptionWhereInput>;
-  OR?: Maybe<FollowSubscriptionWhereInput[] | FollowSubscriptionWhereInput>;
-  NOT?: Maybe<FollowSubscriptionWhereInput[] | FollowSubscriptionWhereInput>;
-}
-
-export interface ThoughtUpdateOneRequiredWithoutCommentsInput {
-  create?: Maybe<ThoughtCreateWithoutCommentsInput>;
-  update?: Maybe<ThoughtUpdateWithoutCommentsDataInput>;
-  upsert?: Maybe<ThoughtUpsertWithoutCommentsInput>;
-  connect?: Maybe<ThoughtWhereUniqueInput>;
-}
-
-export interface UserUpdateManyMutationInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  username?: Maybe<String>;
-  moto?: Maybe<String>;
-  gender?: Maybe<Gender>;
-}
-
-export interface ThoughtUpdateWithoutCommentsDataInput {
-  postedBy?: Maybe<UserUpdateOneRequiredWithoutThoughtsInput>;
-  content?: Maybe<String>;
-  loves?: Maybe<LoveUpdateManyWithoutThoughtInput>;
-}
-
-export interface UserCreateInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  email: String;
-  password: String;
-  username: String;
-  moto: String;
-  gender: Gender;
-  followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
-  followers?: Maybe<FollowCreateManyWithoutUserInput>;
-  thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
-  loves?: Maybe<LoveCreateManyWithoutUserInput>;
-  comments?: Maybe<CommentCreateManyWithoutPostedByInput>;
-}
-
-export interface UserUpdateOneRequiredWithoutThoughtsInput {
-  create?: Maybe<UserCreateWithoutThoughtsInput>;
-  update?: Maybe<UserUpdateWithoutThoughtsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutThoughtsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface ThoughtUpdateManyMutationInput {
-  content?: Maybe<String>;
-}
-
-export interface UserUpdateWithoutThoughtsDataInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  username?: Maybe<String>;
-  moto?: Maybe<String>;
-  gender?: Maybe<Gender>;
-  followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
-  followers?: Maybe<FollowUpdateManyWithoutUserInput>;
-  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
-  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
-}
-
-export interface ThoughtCreateInput {
-  id?: Maybe<ID_Input>;
-  postedBy: UserCreateOneWithoutThoughtsInput;
-  content: String;
-  loves?: Maybe<LoveCreateManyWithoutThoughtInput>;
-  comments?: Maybe<CommentCreateManyWithoutThoughtInput>;
-}
-
-export interface FollowUpdateManyWithoutFollowedUserInput {
-  create?: Maybe<
-    | FollowCreateWithoutFollowedUserInput[]
-    | FollowCreateWithoutFollowedUserInput
-  >;
-  delete?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-  connect?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-  set?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-  disconnect?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-  update?: Maybe<
-    | FollowUpdateWithWhereUniqueWithoutFollowedUserInput[]
-    | FollowUpdateWithWhereUniqueWithoutFollowedUserInput
-  >;
-  upsert?: Maybe<
-    | FollowUpsertWithWhereUniqueWithoutFollowedUserInput[]
-    | FollowUpsertWithWhereUniqueWithoutFollowedUserInput
-  >;
-  deleteMany?: Maybe<FollowScalarWhereInput[] | FollowScalarWhereInput>;
-}
-
-export interface LoveUpdateInput {
-  thought?: Maybe<ThoughtUpdateOneRequiredWithoutLovesInput>;
-  user?: Maybe<UserUpdateOneRequiredWithoutLovesInput>;
-}
-
-export interface FollowUpdateWithWhereUniqueWithoutFollowedUserInput {
-  where: FollowWhereUniqueInput;
-  data: FollowUpdateWithoutFollowedUserDataInput;
-}
-
-export interface FollowUpdateInput {
-  user?: Maybe<UserUpdateOneRequiredWithoutFollowersInput>;
-  followedUser?: Maybe<UserUpdateOneRequiredWithoutFollowingsInput>;
-}
-
-export interface ThoughtUpdateManyWithWhereNestedInput {
-  where: ThoughtScalarWhereInput;
-  data: ThoughtUpdateManyDataInput;
-}
-
-export interface FollowCreateInput {
-  id?: Maybe<ID_Input>;
-  user: UserCreateOneWithoutFollowersInput;
-  followedUser: UserCreateOneWithoutFollowingsInput;
-}
-
-export interface UserUpdateOneRequiredWithoutFollowersInput {
-  create?: Maybe<UserCreateWithoutFollowersInput>;
-  update?: Maybe<UserUpdateWithoutFollowersDataInput>;
-  upsert?: Maybe<UserUpsertWithoutFollowersInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface ThoughtUpsertWithoutCommentsInput {
-  update: ThoughtUpdateWithoutCommentsDataInput;
-  create: ThoughtCreateWithoutCommentsInput;
-}
-
-export interface UserUpdateWithoutFollowersDataInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  username?: Maybe<String>;
-  moto?: Maybe<String>;
-  gender?: Maybe<Gender>;
-  followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
-  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
-  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
-  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
-}
-
-export interface UserUpsertWithoutThoughtsInput {
-  update: UserUpdateWithoutThoughtsDataInput;
-  create: UserCreateWithoutThoughtsInput;
-}
-
-export interface ThoughtUpdateManyWithoutPostedByInput {
-  create?: Maybe<
-    ThoughtCreateWithoutPostedByInput[] | ThoughtCreateWithoutPostedByInput
-  >;
-  delete?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
-  connect?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
-  set?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
-  disconnect?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
-  update?: Maybe<
-    | ThoughtUpdateWithWhereUniqueWithoutPostedByInput[]
-    | ThoughtUpdateWithWhereUniqueWithoutPostedByInput
-  >;
-  upsert?: Maybe<
-    | ThoughtUpsertWithWhereUniqueWithoutPostedByInput[]
-    | ThoughtUpsertWithWhereUniqueWithoutPostedByInput
-  >;
-  deleteMany?: Maybe<ThoughtScalarWhereInput[] | ThoughtScalarWhereInput>;
-  updateMany?: Maybe<
-    | ThoughtUpdateManyWithWhereNestedInput[]
-    | ThoughtUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface UserUpsertWithoutFollowersInput {
-  update: UserUpdateWithoutFollowersDataInput;
-  create: UserCreateWithoutFollowersInput;
-}
-
-export interface ThoughtUpdateWithWhereUniqueWithoutPostedByInput {
-  where: ThoughtWhereUniqueInput;
-  data: ThoughtUpdateWithoutPostedByDataInput;
-}
-
-export interface ThoughtCreateOneWithoutCommentsInput {
-  create?: Maybe<ThoughtCreateWithoutCommentsInput>;
-  connect?: Maybe<ThoughtWhereUniqueInput>;
 }
 
 export interface ThoughtWhereInput {
@@ -777,9 +414,26 @@ export interface ThoughtWhereInput {
   NOT?: Maybe<ThoughtWhereInput[] | ThoughtWhereInput>;
 }
 
-export interface UserCreateOneWithoutThoughtsInput {
-  create?: Maybe<UserCreateWithoutThoughtsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface LoveWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  thought?: Maybe<ThoughtWhereInput>;
+  user?: Maybe<UserWhereInput>;
+  AND?: Maybe<LoveWhereInput[] | LoveWhereInput>;
+  OR?: Maybe<LoveWhereInput[] | LoveWhereInput>;
+  NOT?: Maybe<LoveWhereInput[] | LoveWhereInput>;
 }
 
 export interface CommentWhereInput {
@@ -826,303 +480,19 @@ export interface CommentWhereInput {
   NOT?: Maybe<CommentWhereInput[] | CommentWhereInput>;
 }
 
-export interface FollowCreateManyWithoutFollowedUserInput {
-  create?: Maybe<
-    | FollowCreateWithoutFollowedUserInput[]
-    | FollowCreateWithoutFollowedUserInput
-  >;
-  connect?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-}
+export type LoveWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
-export interface ThoughtScalarWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  content?: Maybe<String>;
-  content_not?: Maybe<String>;
-  content_in?: Maybe<String[] | String>;
-  content_not_in?: Maybe<String[] | String>;
-  content_lt?: Maybe<String>;
-  content_lte?: Maybe<String>;
-  content_gt?: Maybe<String>;
-  content_gte?: Maybe<String>;
-  content_contains?: Maybe<String>;
-  content_not_contains?: Maybe<String>;
-  content_starts_with?: Maybe<String>;
-  content_not_starts_with?: Maybe<String>;
-  content_ends_with?: Maybe<String>;
-  content_not_ends_with?: Maybe<String>;
-  AND?: Maybe<ThoughtScalarWhereInput[] | ThoughtScalarWhereInput>;
-  OR?: Maybe<ThoughtScalarWhereInput[] | ThoughtScalarWhereInput>;
-  NOT?: Maybe<ThoughtScalarWhereInput[] | ThoughtScalarWhereInput>;
-}
+export type ThoughtWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
-export interface UserCreateOneWithoutFollowersInput {
-  create?: Maybe<UserCreateWithoutFollowersInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface ThoughtUpsertWithWhereUniqueWithoutPostedByInput {
-  where: ThoughtWhereUniqueInput;
-  update: ThoughtUpdateWithoutPostedByDataInput;
-  create: ThoughtCreateWithoutPostedByInput;
-}
-
-export interface ThoughtCreateManyWithoutPostedByInput {
-  create?: Maybe<
-    ThoughtCreateWithoutPostedByInput[] | ThoughtCreateWithoutPostedByInput
-  >;
-  connect?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
-}
-
-export interface UserUpdateOneRequiredWithoutLovesInput {
-  create?: Maybe<UserCreateWithoutLovesInput>;
-  update?: Maybe<UserUpdateWithoutLovesDataInput>;
-  upsert?: Maybe<UserUpsertWithoutLovesInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface LoveCreateManyWithoutThoughtInput {
-  create?: Maybe<
-    LoveCreateWithoutThoughtInput[] | LoveCreateWithoutThoughtInput
-  >;
-  connect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-}
-
-export interface UserUpdateWithoutLovesDataInput {
-  name?: Maybe<String>;
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
   email?: Maybe<String>;
-  password?: Maybe<String>;
   username?: Maybe<String>;
-  moto?: Maybe<String>;
-  gender?: Maybe<Gender>;
-  followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
-  followers?: Maybe<FollowUpdateManyWithoutUserInput>;
-  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
-  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
-}
-
-export interface UserCreateOneWithoutLovesInput {
-  create?: Maybe<UserCreateWithoutLovesInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface FollowUpdateManyWithoutUserInput {
-  create?: Maybe<FollowCreateWithoutUserInput[] | FollowCreateWithoutUserInput>;
-  delete?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-  connect?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-  set?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-  disconnect?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-  update?: Maybe<
-    | FollowUpdateWithWhereUniqueWithoutUserInput[]
-    | FollowUpdateWithWhereUniqueWithoutUserInput
-  >;
-  upsert?: Maybe<
-    | FollowUpsertWithWhereUniqueWithoutUserInput[]
-    | FollowUpsertWithWhereUniqueWithoutUserInput
-  >;
-  deleteMany?: Maybe<FollowScalarWhereInput[] | FollowScalarWhereInput>;
-}
-
-export interface FollowCreateManyWithoutUserInput {
-  create?: Maybe<FollowCreateWithoutUserInput[] | FollowCreateWithoutUserInput>;
-  connect?: Maybe<FollowWhereUniqueInput[] | FollowWhereUniqueInput>;
-}
-
-export interface FollowUpdateWithWhereUniqueWithoutUserInput {
-  where: FollowWhereUniqueInput;
-  data: FollowUpdateWithoutUserDataInput;
-}
-
-export interface UserCreateOneWithoutFollowingsInput {
-  create?: Maybe<UserCreateWithoutFollowingsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface FollowUpdateWithoutUserDataInput {
-  followedUser?: Maybe<UserUpdateOneRequiredWithoutFollowingsInput>;
-}
-
-export interface LoveCreateManyWithoutUserInput {
-  create?: Maybe<LoveCreateWithoutUserInput[] | LoveCreateWithoutUserInput>;
-  connect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-}
-
-export interface UserUpdateOneRequiredWithoutFollowingsInput {
-  create?: Maybe<UserCreateWithoutFollowingsInput>;
-  update?: Maybe<UserUpdateWithoutFollowingsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutFollowingsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface ThoughtCreateOneWithoutLovesInput {
-  create?: Maybe<ThoughtCreateWithoutLovesInput>;
-  connect?: Maybe<ThoughtWhereUniqueInput>;
-}
-
-export interface UserUpdateWithoutFollowingsDataInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  username?: Maybe<String>;
-  moto?: Maybe<String>;
-  gender?: Maybe<Gender>;
-  followers?: Maybe<FollowUpdateManyWithoutUserInput>;
-  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
-  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
-  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
-}
-
-export interface CommentCreateManyWithoutThoughtInput {
-  create?: Maybe<
-    CommentCreateWithoutThoughtInput[] | CommentCreateWithoutThoughtInput
-  >;
-  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-}
-
-export interface LoveUpdateManyWithoutUserInput {
-  create?: Maybe<LoveCreateWithoutUserInput[] | LoveCreateWithoutUserInput>;
-  delete?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-  connect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-  set?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-  disconnect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
-  update?: Maybe<
-    | LoveUpdateWithWhereUniqueWithoutUserInput[]
-    | LoveUpdateWithWhereUniqueWithoutUserInput
-  >;
-  upsert?: Maybe<
-    | LoveUpsertWithWhereUniqueWithoutUserInput[]
-    | LoveUpsertWithWhereUniqueWithoutUserInput
-  >;
-  deleteMany?: Maybe<LoveScalarWhereInput[] | LoveScalarWhereInput>;
-}
-
-export interface UserCreateOneWithoutCommentsInput {
-  create?: Maybe<UserCreateWithoutCommentsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface LoveUpdateWithWhereUniqueWithoutUserInput {
-  where: LoveWhereUniqueInput;
-  data: LoveUpdateWithoutUserDataInput;
-}
-
-export interface LoveSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<LoveWhereInput>;
-  AND?: Maybe<LoveSubscriptionWhereInput[] | LoveSubscriptionWhereInput>;
-  OR?: Maybe<LoveSubscriptionWhereInput[] | LoveSubscriptionWhereInput>;
-  NOT?: Maybe<LoveSubscriptionWhereInput[] | LoveSubscriptionWhereInput>;
-}
-
-export interface LoveUpdateWithoutUserDataInput {
-  thought?: Maybe<ThoughtUpdateOneRequiredWithoutLovesInput>;
-}
-
-export interface UserUpdateInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  username?: Maybe<String>;
-  moto?: Maybe<String>;
-  gender?: Maybe<Gender>;
-  followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
-  followers?: Maybe<FollowUpdateManyWithoutUserInput>;
-  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
-  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
-  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
-}
-
-export interface ThoughtUpdateOneRequiredWithoutLovesInput {
-  create?: Maybe<ThoughtCreateWithoutLovesInput>;
-  update?: Maybe<ThoughtUpdateWithoutLovesDataInput>;
-  upsert?: Maybe<ThoughtUpsertWithoutLovesInput>;
-  connect?: Maybe<ThoughtWhereUniqueInput>;
-}
-
-export interface ThoughtUpdateInput {
-  postedBy?: Maybe<UserUpdateOneRequiredWithoutThoughtsInput>;
-  content?: Maybe<String>;
-  loves?: Maybe<LoveUpdateManyWithoutThoughtInput>;
-  comments?: Maybe<CommentUpdateManyWithoutThoughtInput>;
-}
-
-export interface ThoughtUpdateWithoutLovesDataInput {
-  postedBy?: Maybe<UserUpdateOneRequiredWithoutThoughtsInput>;
-  content?: Maybe<String>;
-  comments?: Maybe<CommentUpdateManyWithoutThoughtInput>;
-}
-
-export interface LoveCreateInput {
-  id?: Maybe<ID_Input>;
-  thought: ThoughtCreateOneWithoutLovesInput;
-  user: UserCreateOneWithoutLovesInput;
-}
-
-export interface CommentUpdateManyWithoutThoughtInput {
-  create?: Maybe<
-    CommentCreateWithoutThoughtInput[] | CommentCreateWithoutThoughtInput
-  >;
-  delete?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-  set?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-  disconnect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
-  update?: Maybe<
-    | CommentUpdateWithWhereUniqueWithoutThoughtInput[]
-    | CommentUpdateWithWhereUniqueWithoutThoughtInput
-  >;
-  upsert?: Maybe<
-    | CommentUpsertWithWhereUniqueWithoutThoughtInput[]
-    | CommentUpsertWithWhereUniqueWithoutThoughtInput
-  >;
-  deleteMany?: Maybe<CommentScalarWhereInput[] | CommentScalarWhereInput>;
-  updateMany?: Maybe<
-    | CommentUpdateManyWithWhereNestedInput[]
-    | CommentUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface CommentUpdateManyMutationInput {
-  content?: Maybe<String>;
-}
-
-export interface CommentUpdateWithWhereUniqueWithoutThoughtInput {
-  where: CommentWhereUniqueInput;
-  data: CommentUpdateWithoutThoughtDataInput;
-}
-
-export interface FollowUpsertWithWhereUniqueWithoutFollowedUserInput {
-  where: FollowWhereUniqueInput;
-  update: FollowUpdateWithoutFollowedUserDataInput;
-  create: FollowCreateWithoutFollowedUserInput;
-}
-
-export interface CommentUpdateWithoutThoughtDataInput {
-  content?: Maybe<String>;
-  postedBy?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
-}
+}>;
 
 export interface CommentCreateInput {
   id?: Maybe<ID_Input>;
@@ -1131,10 +501,20 @@ export interface CommentCreateInput {
   postedBy: UserCreateOneWithoutCommentsInput;
 }
 
-export interface UserUpdateOneRequiredWithoutCommentsInput {
-  create?: Maybe<UserCreateWithoutCommentsInput>;
-  update?: Maybe<UserUpdateWithoutCommentsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutCommentsInput>;
+export interface ThoughtCreateOneWithoutCommentsInput {
+  create?: Maybe<ThoughtCreateWithoutCommentsInput>;
+  connect?: Maybe<ThoughtWhereUniqueInput>;
+}
+
+export interface ThoughtCreateWithoutCommentsInput {
+  id?: Maybe<ID_Input>;
+  postedBy: UserCreateOneWithoutThoughtsInput;
+  content: String;
+  loves?: Maybe<LoveCreateManyWithoutThoughtInput>;
+}
+
+export interface UserCreateOneWithoutThoughtsInput {
+  create?: Maybe<UserCreateWithoutThoughtsInput>;
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
@@ -1146,23 +526,38 @@ export interface UserCreateWithoutThoughtsInput {
   username: String;
   moto: String;
   gender: Gender;
-  followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
-  followers?: Maybe<FollowCreateManyWithoutUserInput>;
+  followings?: Maybe<UserCreateManyWithoutFollowingsInput>;
+  followers?: Maybe<UserCreateManyWithoutFollowersInput>;
   loves?: Maybe<LoveCreateManyWithoutUserInput>;
   comments?: Maybe<CommentCreateManyWithoutPostedByInput>;
 }
 
-export interface UserUpdateWithoutCommentsDataInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  username?: Maybe<String>;
-  moto?: Maybe<String>;
-  gender?: Maybe<Gender>;
-  followings?: Maybe<FollowUpdateManyWithoutFollowedUserInput>;
-  followers?: Maybe<FollowUpdateManyWithoutUserInput>;
-  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
-  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
+export interface UserCreateManyWithoutFollowingsInput {
+  create?: Maybe<
+    UserCreateWithoutFollowingsInput[] | UserCreateWithoutFollowingsInput
+  >;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutFollowingsInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  email: String;
+  password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
+  followers?: Maybe<UserCreateManyWithoutFollowersInput>;
+  thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
+  loves?: Maybe<LoveCreateManyWithoutUserInput>;
+  comments?: Maybe<CommentCreateManyWithoutPostedByInput>;
+}
+
+export interface UserCreateManyWithoutFollowersInput {
+  create?: Maybe<
+    UserCreateWithoutFollowersInput[] | UserCreateWithoutFollowersInput
+  >;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
 }
 
 export interface UserCreateWithoutFollowersInput {
@@ -1173,15 +568,31 @@ export interface UserCreateWithoutFollowersInput {
   username: String;
   moto: String;
   gender: Gender;
-  followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
+  followings?: Maybe<UserCreateManyWithoutFollowingsInput>;
   thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
   loves?: Maybe<LoveCreateManyWithoutUserInput>;
   comments?: Maybe<CommentCreateManyWithoutPostedByInput>;
 }
 
-export interface UserUpsertWithoutCommentsInput {
-  update: UserUpdateWithoutCommentsDataInput;
-  create: UserCreateWithoutCommentsInput;
+export interface ThoughtCreateManyWithoutPostedByInput {
+  create?: Maybe<
+    ThoughtCreateWithoutPostedByInput[] | ThoughtCreateWithoutPostedByInput
+  >;
+  connect?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
+}
+
+export interface ThoughtCreateWithoutPostedByInput {
+  id?: Maybe<ID_Input>;
+  content: String;
+  loves?: Maybe<LoveCreateManyWithoutThoughtInput>;
+  comments?: Maybe<CommentCreateManyWithoutThoughtInput>;
+}
+
+export interface LoveCreateManyWithoutThoughtInput {
+  create?: Maybe<
+    LoveCreateWithoutThoughtInput[] | LoveCreateWithoutThoughtInput
+  >;
+  connect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
 }
 
 export interface LoveCreateWithoutThoughtInput {
@@ -1189,15 +600,330 @@ export interface LoveCreateWithoutThoughtInput {
   user: UserCreateOneWithoutLovesInput;
 }
 
-export interface CommentUpsertWithWhereUniqueWithoutThoughtInput {
-  where: CommentWhereUniqueInput;
-  update: CommentUpdateWithoutThoughtDataInput;
-  create: CommentCreateWithoutThoughtInput;
+export interface UserCreateOneWithoutLovesInput {
+  create?: Maybe<UserCreateWithoutLovesInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface FollowCreateWithoutUserInput {
+export interface UserCreateWithoutLovesInput {
   id?: Maybe<ID_Input>;
-  followedUser: UserCreateOneWithoutFollowingsInput;
+  name: String;
+  email: String;
+  password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
+  followings?: Maybe<UserCreateManyWithoutFollowingsInput>;
+  followers?: Maybe<UserCreateManyWithoutFollowersInput>;
+  thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
+  comments?: Maybe<CommentCreateManyWithoutPostedByInput>;
+}
+
+export interface CommentCreateManyWithoutPostedByInput {
+  create?: Maybe<
+    CommentCreateWithoutPostedByInput[] | CommentCreateWithoutPostedByInput
+  >;
+  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+}
+
+export interface CommentCreateWithoutPostedByInput {
+  id?: Maybe<ID_Input>;
+  thought: ThoughtCreateOneWithoutCommentsInput;
+  content: String;
+}
+
+export interface CommentCreateManyWithoutThoughtInput {
+  create?: Maybe<
+    CommentCreateWithoutThoughtInput[] | CommentCreateWithoutThoughtInput
+  >;
+  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+}
+
+export interface CommentCreateWithoutThoughtInput {
+  id?: Maybe<ID_Input>;
+  content: String;
+  postedBy: UserCreateOneWithoutCommentsInput;
+}
+
+export interface UserCreateOneWithoutCommentsInput {
+  create?: Maybe<UserCreateWithoutCommentsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutCommentsInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  email: String;
+  password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
+  followings?: Maybe<UserCreateManyWithoutFollowingsInput>;
+  followers?: Maybe<UserCreateManyWithoutFollowersInput>;
+  thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
+  loves?: Maybe<LoveCreateManyWithoutUserInput>;
+}
+
+export interface LoveCreateManyWithoutUserInput {
+  create?: Maybe<LoveCreateWithoutUserInput[] | LoveCreateWithoutUserInput>;
+  connect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
+}
+
+export interface LoveCreateWithoutUserInput {
+  id?: Maybe<ID_Input>;
+  thought: ThoughtCreateOneWithoutLovesInput;
+}
+
+export interface ThoughtCreateOneWithoutLovesInput {
+  create?: Maybe<ThoughtCreateWithoutLovesInput>;
+  connect?: Maybe<ThoughtWhereUniqueInput>;
+}
+
+export interface ThoughtCreateWithoutLovesInput {
+  id?: Maybe<ID_Input>;
+  postedBy: UserCreateOneWithoutThoughtsInput;
+  content: String;
+  comments?: Maybe<CommentCreateManyWithoutThoughtInput>;
+}
+
+export interface CommentUpdateInput {
+  thought?: Maybe<ThoughtUpdateOneRequiredWithoutCommentsInput>;
+  content?: Maybe<String>;
+  postedBy?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
+}
+
+export interface ThoughtUpdateOneRequiredWithoutCommentsInput {
+  create?: Maybe<ThoughtCreateWithoutCommentsInput>;
+  update?: Maybe<ThoughtUpdateWithoutCommentsDataInput>;
+  upsert?: Maybe<ThoughtUpsertWithoutCommentsInput>;
+  connect?: Maybe<ThoughtWhereUniqueInput>;
+}
+
+export interface ThoughtUpdateWithoutCommentsDataInput {
+  postedBy?: Maybe<UserUpdateOneRequiredWithoutThoughtsInput>;
+  content?: Maybe<String>;
+  loves?: Maybe<LoveUpdateManyWithoutThoughtInput>;
+}
+
+export interface UserUpdateOneRequiredWithoutThoughtsInput {
+  create?: Maybe<UserCreateWithoutThoughtsInput>;
+  update?: Maybe<UserUpdateWithoutThoughtsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutThoughtsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutThoughtsDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
+  followings?: Maybe<UserUpdateManyWithoutFollowingsInput>;
+  followers?: Maybe<UserUpdateManyWithoutFollowersInput>;
+  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
+  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
+}
+
+export interface UserUpdateManyWithoutFollowingsInput {
+  create?: Maybe<
+    UserCreateWithoutFollowingsInput[] | UserCreateWithoutFollowingsInput
+  >;
+  delete?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  set?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  disconnect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  update?: Maybe<
+    | UserUpdateWithWhereUniqueWithoutFollowingsInput[]
+    | UserUpdateWithWhereUniqueWithoutFollowingsInput
+  >;
+  upsert?: Maybe<
+    | UserUpsertWithWhereUniqueWithoutFollowingsInput[]
+    | UserUpsertWithWhereUniqueWithoutFollowingsInput
+  >;
+  deleteMany?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  updateMany?: Maybe<
+    UserUpdateManyWithWhereNestedInput[] | UserUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutFollowingsInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutFollowingsDataInput;
+}
+
+export interface UserUpdateWithoutFollowingsDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
+  followers?: Maybe<UserUpdateManyWithoutFollowersInput>;
+  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
+  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
+  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
+}
+
+export interface UserUpdateManyWithoutFollowersInput {
+  create?: Maybe<
+    UserCreateWithoutFollowersInput[] | UserCreateWithoutFollowersInput
+  >;
+  delete?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  connect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  set?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  disconnect?: Maybe<UserWhereUniqueInput[] | UserWhereUniqueInput>;
+  update?: Maybe<
+    | UserUpdateWithWhereUniqueWithoutFollowersInput[]
+    | UserUpdateWithWhereUniqueWithoutFollowersInput
+  >;
+  upsert?: Maybe<
+    | UserUpsertWithWhereUniqueWithoutFollowersInput[]
+    | UserUpsertWithWhereUniqueWithoutFollowersInput
+  >;
+  deleteMany?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  updateMany?: Maybe<
+    UserUpdateManyWithWhereNestedInput[] | UserUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutFollowersInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutFollowersDataInput;
+}
+
+export interface UserUpdateWithoutFollowersDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
+  followings?: Maybe<UserUpdateManyWithoutFollowingsInput>;
+  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
+  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
+  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
+}
+
+export interface ThoughtUpdateManyWithoutPostedByInput {
+  create?: Maybe<
+    ThoughtCreateWithoutPostedByInput[] | ThoughtCreateWithoutPostedByInput
+  >;
+  delete?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
+  connect?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
+  set?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
+  disconnect?: Maybe<ThoughtWhereUniqueInput[] | ThoughtWhereUniqueInput>;
+  update?: Maybe<
+    | ThoughtUpdateWithWhereUniqueWithoutPostedByInput[]
+    | ThoughtUpdateWithWhereUniqueWithoutPostedByInput
+  >;
+  upsert?: Maybe<
+    | ThoughtUpsertWithWhereUniqueWithoutPostedByInput[]
+    | ThoughtUpsertWithWhereUniqueWithoutPostedByInput
+  >;
+  deleteMany?: Maybe<ThoughtScalarWhereInput[] | ThoughtScalarWhereInput>;
+  updateMany?: Maybe<
+    | ThoughtUpdateManyWithWhereNestedInput[]
+    | ThoughtUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface ThoughtUpdateWithWhereUniqueWithoutPostedByInput {
+  where: ThoughtWhereUniqueInput;
+  data: ThoughtUpdateWithoutPostedByDataInput;
+}
+
+export interface ThoughtUpdateWithoutPostedByDataInput {
+  content?: Maybe<String>;
+  loves?: Maybe<LoveUpdateManyWithoutThoughtInput>;
+  comments?: Maybe<CommentUpdateManyWithoutThoughtInput>;
+}
+
+export interface LoveUpdateManyWithoutThoughtInput {
+  create?: Maybe<
+    LoveCreateWithoutThoughtInput[] | LoveCreateWithoutThoughtInput
+  >;
+  delete?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
+  connect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
+  set?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
+  disconnect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
+  update?: Maybe<
+    | LoveUpdateWithWhereUniqueWithoutThoughtInput[]
+    | LoveUpdateWithWhereUniqueWithoutThoughtInput
+  >;
+  upsert?: Maybe<
+    | LoveUpsertWithWhereUniqueWithoutThoughtInput[]
+    | LoveUpsertWithWhereUniqueWithoutThoughtInput
+  >;
+  deleteMany?: Maybe<LoveScalarWhereInput[] | LoveScalarWhereInput>;
+}
+
+export interface LoveUpdateWithWhereUniqueWithoutThoughtInput {
+  where: LoveWhereUniqueInput;
+  data: LoveUpdateWithoutThoughtDataInput;
+}
+
+export interface LoveUpdateWithoutThoughtDataInput {
+  user?: Maybe<UserUpdateOneRequiredWithoutLovesInput>;
+}
+
+export interface UserUpdateOneRequiredWithoutLovesInput {
+  create?: Maybe<UserCreateWithoutLovesInput>;
+  update?: Maybe<UserUpdateWithoutLovesDataInput>;
+  upsert?: Maybe<UserUpsertWithoutLovesInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutLovesDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
+  followings?: Maybe<UserUpdateManyWithoutFollowingsInput>;
+  followers?: Maybe<UserUpdateManyWithoutFollowersInput>;
+  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
+  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
+}
+
+export interface CommentUpdateManyWithoutPostedByInput {
+  create?: Maybe<
+    CommentCreateWithoutPostedByInput[] | CommentCreateWithoutPostedByInput
+  >;
+  delete?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+  connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+  set?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+  disconnect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
+  update?: Maybe<
+    | CommentUpdateWithWhereUniqueWithoutPostedByInput[]
+    | CommentUpdateWithWhereUniqueWithoutPostedByInput
+  >;
+  upsert?: Maybe<
+    | CommentUpsertWithWhereUniqueWithoutPostedByInput[]
+    | CommentUpsertWithWhereUniqueWithoutPostedByInput
+  >;
+  deleteMany?: Maybe<CommentScalarWhereInput[] | CommentScalarWhereInput>;
+  updateMany?: Maybe<
+    | CommentUpdateManyWithWhereNestedInput[]
+    | CommentUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface CommentUpdateWithWhereUniqueWithoutPostedByInput {
+  where: CommentWhereUniqueInput;
+  data: CommentUpdateWithoutPostedByDataInput;
+}
+
+export interface CommentUpdateWithoutPostedByDataInput {
+  thought?: Maybe<ThoughtUpdateOneRequiredWithoutCommentsInput>;
+  content?: Maybe<String>;
+}
+
+export interface CommentUpsertWithWhereUniqueWithoutPostedByInput {
+  where: CommentWhereUniqueInput;
+  update: CommentUpdateWithoutPostedByDataInput;
+  create: CommentCreateWithoutPostedByInput;
 }
 
 export interface CommentScalarWhereInput {
@@ -1242,57 +968,25 @@ export interface CommentScalarWhereInput {
   NOT?: Maybe<CommentScalarWhereInput[] | CommentScalarWhereInput>;
 }
 
-export interface LoveCreateWithoutUserInput {
-  id?: Maybe<ID_Input>;
-  thought: ThoughtCreateOneWithoutLovesInput;
-}
-
 export interface CommentUpdateManyWithWhereNestedInput {
   where: CommentScalarWhereInput;
   data: CommentUpdateManyDataInput;
-}
-
-export interface CommentCreateWithoutThoughtInput {
-  id?: Maybe<ID_Input>;
-  content: String;
-  postedBy: UserCreateOneWithoutCommentsInput;
 }
 
 export interface CommentUpdateManyDataInput {
   content?: Maybe<String>;
 }
 
-export interface CommentSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<CommentWhereInput>;
-  AND?: Maybe<CommentSubscriptionWhereInput[] | CommentSubscriptionWhereInput>;
-  OR?: Maybe<CommentSubscriptionWhereInput[] | CommentSubscriptionWhereInput>;
-  NOT?: Maybe<CommentSubscriptionWhereInput[] | CommentSubscriptionWhereInput>;
+export interface UserUpsertWithoutLovesInput {
+  update: UserUpdateWithoutLovesDataInput;
+  create: UserCreateWithoutLovesInput;
 }
 
-export interface ThoughtUpsertWithoutLovesInput {
-  update: ThoughtUpdateWithoutLovesDataInput;
-  create: ThoughtCreateWithoutLovesInput;
-}
-
-export type LoveWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface LoveUpsertWithWhereUniqueWithoutUserInput {
+export interface LoveUpsertWithWhereUniqueWithoutThoughtInput {
   where: LoveWhereUniqueInput;
-  update: LoveUpdateWithoutUserDataInput;
-  create: LoveCreateWithoutUserInput;
+  update: LoveUpdateWithoutThoughtDataInput;
+  create: LoveCreateWithoutThoughtInput;
 }
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-  username?: Maybe<String>;
-}>;
 
 export interface LoveScalarWhereInput {
   id?: Maybe<ID_Input>;
@@ -1314,28 +1008,21 @@ export interface LoveScalarWhereInput {
   NOT?: Maybe<LoveScalarWhereInput[] | LoveScalarWhereInput>;
 }
 
-export interface ThoughtCreateWithoutCommentsInput {
-  id?: Maybe<ID_Input>;
-  postedBy: UserCreateOneWithoutThoughtsInput;
-  content: String;
-  loves?: Maybe<LoveCreateManyWithoutThoughtInput>;
-}
-
-export interface CommentUpdateManyWithoutPostedByInput {
+export interface CommentUpdateManyWithoutThoughtInput {
   create?: Maybe<
-    CommentCreateWithoutPostedByInput[] | CommentCreateWithoutPostedByInput
+    CommentCreateWithoutThoughtInput[] | CommentCreateWithoutThoughtInput
   >;
   delete?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
   connect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
   set?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
   disconnect?: Maybe<CommentWhereUniqueInput[] | CommentWhereUniqueInput>;
   update?: Maybe<
-    | CommentUpdateWithWhereUniqueWithoutPostedByInput[]
-    | CommentUpdateWithWhereUniqueWithoutPostedByInput
+    | CommentUpdateWithWhereUniqueWithoutThoughtInput[]
+    | CommentUpdateWithWhereUniqueWithoutThoughtInput
   >;
   upsert?: Maybe<
-    | CommentUpsertWithWhereUniqueWithoutPostedByInput[]
-    | CommentUpsertWithWhereUniqueWithoutPostedByInput
+    | CommentUpsertWithWhereUniqueWithoutThoughtInput[]
+    | CommentUpsertWithWhereUniqueWithoutThoughtInput
   >;
   deleteMany?: Maybe<CommentScalarWhereInput[] | CommentScalarWhereInput>;
   updateMany?: Maybe<
@@ -1344,64 +1031,104 @@ export interface CommentUpdateManyWithoutPostedByInput {
   >;
 }
 
-export interface ThoughtCreateWithoutPostedByInput {
-  id?: Maybe<ID_Input>;
-  content: String;
-  loves?: Maybe<LoveCreateManyWithoutThoughtInput>;
-  comments?: Maybe<CommentCreateManyWithoutThoughtInput>;
-}
-
-export interface CommentUpdateWithWhereUniqueWithoutPostedByInput {
+export interface CommentUpdateWithWhereUniqueWithoutThoughtInput {
   where: CommentWhereUniqueInput;
-  data: CommentUpdateWithoutPostedByDataInput;
+  data: CommentUpdateWithoutThoughtDataInput;
 }
 
-export interface UserCreateWithoutFollowingsInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  email: String;
-  password: String;
-  username: String;
-  moto: String;
-  gender: Gender;
-  followers?: Maybe<FollowCreateManyWithoutUserInput>;
-  thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
-  loves?: Maybe<LoveCreateManyWithoutUserInput>;
-  comments?: Maybe<CommentCreateManyWithoutPostedByInput>;
-}
-
-export interface CommentUpdateWithoutPostedByDataInput {
-  thought?: Maybe<ThoughtUpdateOneRequiredWithoutCommentsInput>;
+export interface CommentUpdateWithoutThoughtDataInput {
   content?: Maybe<String>;
+  postedBy?: Maybe<UserUpdateOneRequiredWithoutCommentsInput>;
 }
 
-export interface UserSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<UserWhereInput>;
-  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+export interface UserUpdateOneRequiredWithoutCommentsInput {
+  create?: Maybe<UserCreateWithoutCommentsInput>;
+  update?: Maybe<UserUpdateWithoutCommentsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutCommentsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export interface CommentUpsertWithWhereUniqueWithoutPostedByInput {
+export interface UserUpdateWithoutCommentsDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
+  followings?: Maybe<UserUpdateManyWithoutFollowingsInput>;
+  followers?: Maybe<UserUpdateManyWithoutFollowersInput>;
+  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
+  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
+}
+
+export interface LoveUpdateManyWithoutUserInput {
+  create?: Maybe<LoveCreateWithoutUserInput[] | LoveCreateWithoutUserInput>;
+  delete?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
+  connect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
+  set?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
+  disconnect?: Maybe<LoveWhereUniqueInput[] | LoveWhereUniqueInput>;
+  update?: Maybe<
+    | LoveUpdateWithWhereUniqueWithoutUserInput[]
+    | LoveUpdateWithWhereUniqueWithoutUserInput
+  >;
+  upsert?: Maybe<
+    | LoveUpsertWithWhereUniqueWithoutUserInput[]
+    | LoveUpsertWithWhereUniqueWithoutUserInput
+  >;
+  deleteMany?: Maybe<LoveScalarWhereInput[] | LoveScalarWhereInput>;
+}
+
+export interface LoveUpdateWithWhereUniqueWithoutUserInput {
+  where: LoveWhereUniqueInput;
+  data: LoveUpdateWithoutUserDataInput;
+}
+
+export interface LoveUpdateWithoutUserDataInput {
+  thought?: Maybe<ThoughtUpdateOneRequiredWithoutLovesInput>;
+}
+
+export interface ThoughtUpdateOneRequiredWithoutLovesInput {
+  create?: Maybe<ThoughtCreateWithoutLovesInput>;
+  update?: Maybe<ThoughtUpdateWithoutLovesDataInput>;
+  upsert?: Maybe<ThoughtUpsertWithoutLovesInput>;
+  connect?: Maybe<ThoughtWhereUniqueInput>;
+}
+
+export interface ThoughtUpdateWithoutLovesDataInput {
+  postedBy?: Maybe<UserUpdateOneRequiredWithoutThoughtsInput>;
+  content?: Maybe<String>;
+  comments?: Maybe<CommentUpdateManyWithoutThoughtInput>;
+}
+
+export interface ThoughtUpsertWithoutLovesInput {
+  update: ThoughtUpdateWithoutLovesDataInput;
+  create: ThoughtCreateWithoutLovesInput;
+}
+
+export interface LoveUpsertWithWhereUniqueWithoutUserInput {
+  where: LoveWhereUniqueInput;
+  update: LoveUpdateWithoutUserDataInput;
+  create: LoveCreateWithoutUserInput;
+}
+
+export interface UserUpsertWithoutCommentsInput {
+  update: UserUpdateWithoutCommentsDataInput;
+  create: UserCreateWithoutCommentsInput;
+}
+
+export interface CommentUpsertWithWhereUniqueWithoutThoughtInput {
   where: CommentWhereUniqueInput;
-  update: CommentUpdateWithoutPostedByDataInput;
-  create: CommentCreateWithoutPostedByInput;
+  update: CommentUpdateWithoutThoughtDataInput;
+  create: CommentCreateWithoutThoughtInput;
 }
 
-export type ThoughtWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface UserUpsertWithoutLovesInput {
-  update: UserUpdateWithoutLovesDataInput;
-  create: UserCreateWithoutLovesInput;
+export interface ThoughtUpsertWithWhereUniqueWithoutPostedByInput {
+  where: ThoughtWhereUniqueInput;
+  update: ThoughtUpdateWithoutPostedByDataInput;
+  create: ThoughtCreateWithoutPostedByInput;
 }
 
-export interface FollowScalarWhereInput {
+export interface ThoughtScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -1416,38 +1143,207 @@ export interface FollowScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  AND?: Maybe<FollowScalarWhereInput[] | FollowScalarWhereInput>;
-  OR?: Maybe<FollowScalarWhereInput[] | FollowScalarWhereInput>;
-  NOT?: Maybe<FollowScalarWhereInput[] | FollowScalarWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  content?: Maybe<String>;
+  content_not?: Maybe<String>;
+  content_in?: Maybe<String[] | String>;
+  content_not_in?: Maybe<String[] | String>;
+  content_lt?: Maybe<String>;
+  content_lte?: Maybe<String>;
+  content_gt?: Maybe<String>;
+  content_gte?: Maybe<String>;
+  content_contains?: Maybe<String>;
+  content_not_contains?: Maybe<String>;
+  content_starts_with?: Maybe<String>;
+  content_not_starts_with?: Maybe<String>;
+  content_ends_with?: Maybe<String>;
+  content_not_ends_with?: Maybe<String>;
+  AND?: Maybe<ThoughtScalarWhereInput[] | ThoughtScalarWhereInput>;
+  OR?: Maybe<ThoughtScalarWhereInput[] | ThoughtScalarWhereInput>;
+  NOT?: Maybe<ThoughtScalarWhereInput[] | ThoughtScalarWhereInput>;
 }
 
-export interface FollowUpsertWithWhereUniqueWithoutUserInput {
-  where: FollowWhereUniqueInput;
-  update: FollowUpdateWithoutUserDataInput;
-  create: FollowCreateWithoutUserInput;
-}
-
-export interface UserUpsertWithoutFollowingsInput {
-  update: UserUpdateWithoutFollowingsDataInput;
-  create: UserCreateWithoutFollowingsInput;
+export interface ThoughtUpdateManyWithWhereNestedInput {
+  where: ThoughtScalarWhereInput;
+  data: ThoughtUpdateManyDataInput;
 }
 
 export interface ThoughtUpdateManyDataInput {
   content?: Maybe<String>;
 }
 
-export type FollowWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
+export interface UserUpsertWithWhereUniqueWithoutFollowersInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutFollowersDataInput;
+  create: UserCreateWithoutFollowersInput;
+}
 
-export interface ThoughtCreateWithoutLovesInput {
+export interface UserScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  password?: Maybe<String>;
+  password_not?: Maybe<String>;
+  password_in?: Maybe<String[] | String>;
+  password_not_in?: Maybe<String[] | String>;
+  password_lt?: Maybe<String>;
+  password_lte?: Maybe<String>;
+  password_gt?: Maybe<String>;
+  password_gte?: Maybe<String>;
+  password_contains?: Maybe<String>;
+  password_not_contains?: Maybe<String>;
+  password_starts_with?: Maybe<String>;
+  password_not_starts_with?: Maybe<String>;
+  password_ends_with?: Maybe<String>;
+  password_not_ends_with?: Maybe<String>;
+  username?: Maybe<String>;
+  username_not?: Maybe<String>;
+  username_in?: Maybe<String[] | String>;
+  username_not_in?: Maybe<String[] | String>;
+  username_lt?: Maybe<String>;
+  username_lte?: Maybe<String>;
+  username_gt?: Maybe<String>;
+  username_gte?: Maybe<String>;
+  username_contains?: Maybe<String>;
+  username_not_contains?: Maybe<String>;
+  username_starts_with?: Maybe<String>;
+  username_not_starts_with?: Maybe<String>;
+  username_ends_with?: Maybe<String>;
+  username_not_ends_with?: Maybe<String>;
+  moto?: Maybe<String>;
+  moto_not?: Maybe<String>;
+  moto_in?: Maybe<String[] | String>;
+  moto_not_in?: Maybe<String[] | String>;
+  moto_lt?: Maybe<String>;
+  moto_lte?: Maybe<String>;
+  moto_gt?: Maybe<String>;
+  moto_gte?: Maybe<String>;
+  moto_contains?: Maybe<String>;
+  moto_not_contains?: Maybe<String>;
+  moto_starts_with?: Maybe<String>;
+  moto_not_starts_with?: Maybe<String>;
+  moto_ends_with?: Maybe<String>;
+  moto_not_ends_with?: Maybe<String>;
+  gender?: Maybe<Gender>;
+  gender_not?: Maybe<Gender>;
+  gender_in?: Maybe<Gender[] | Gender>;
+  gender_not_in?: Maybe<Gender[] | Gender>;
+  AND?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  OR?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+  NOT?: Maybe<UserScalarWhereInput[] | UserScalarWhereInput>;
+}
+
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput;
+  data: UserUpdateManyDataInput;
+}
+
+export interface UserUpdateManyDataInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
+}
+
+export interface UserUpsertWithWhereUniqueWithoutFollowingsInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutFollowingsDataInput;
+  create: UserCreateWithoutFollowingsInput;
+}
+
+export interface UserUpsertWithoutThoughtsInput {
+  update: UserUpdateWithoutThoughtsDataInput;
+  create: UserCreateWithoutThoughtsInput;
+}
+
+export interface ThoughtUpsertWithoutCommentsInput {
+  update: ThoughtUpdateWithoutCommentsDataInput;
+  create: ThoughtCreateWithoutCommentsInput;
+}
+
+export interface CommentUpdateManyMutationInput {
+  content?: Maybe<String>;
+}
+
+export interface LoveCreateInput {
+  id?: Maybe<ID_Input>;
+  thought: ThoughtCreateOneWithoutLovesInput;
+  user: UserCreateOneWithoutLovesInput;
+}
+
+export interface LoveUpdateInput {
+  thought?: Maybe<ThoughtUpdateOneRequiredWithoutLovesInput>;
+  user?: Maybe<UserUpdateOneRequiredWithoutLovesInput>;
+}
+
+export interface ThoughtCreateInput {
   id?: Maybe<ID_Input>;
   postedBy: UserCreateOneWithoutThoughtsInput;
   content: String;
+  loves?: Maybe<LoveCreateManyWithoutThoughtInput>;
   comments?: Maybe<CommentCreateManyWithoutThoughtInput>;
 }
 
-export interface UserCreateWithoutLovesInput {
+export interface ThoughtUpdateInput {
+  postedBy?: Maybe<UserUpdateOneRequiredWithoutThoughtsInput>;
+  content?: Maybe<String>;
+  loves?: Maybe<LoveUpdateManyWithoutThoughtInput>;
+  comments?: Maybe<CommentUpdateManyWithoutThoughtInput>;
+}
+
+export interface ThoughtUpdateManyMutationInput {
+  content?: Maybe<String>;
+}
+
+export interface UserCreateInput {
   id?: Maybe<ID_Input>;
   name: String;
   email: String;
@@ -1455,298 +1351,82 @@ export interface UserCreateWithoutLovesInput {
   username: String;
   moto: String;
   gender: Gender;
-  followings?: Maybe<FollowCreateManyWithoutFollowedUserInput>;
-  followers?: Maybe<FollowCreateManyWithoutUserInput>;
+  followings?: Maybe<UserCreateManyWithoutFollowingsInput>;
+  followers?: Maybe<UserCreateManyWithoutFollowersInput>;
   thoughts?: Maybe<ThoughtCreateManyWithoutPostedByInput>;
+  loves?: Maybe<LoveCreateManyWithoutUserInput>;
   comments?: Maybe<CommentCreateManyWithoutPostedByInput>;
 }
 
-export interface FollowCreateWithoutFollowedUserInput {
-  id?: Maybe<ID_Input>;
-  user: UserCreateOneWithoutFollowersInput;
+export interface UserUpdateInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
+  followings?: Maybe<UserUpdateManyWithoutFollowingsInput>;
+  followers?: Maybe<UserUpdateManyWithoutFollowersInput>;
+  thoughts?: Maybe<ThoughtUpdateManyWithoutPostedByInput>;
+  loves?: Maybe<LoveUpdateManyWithoutUserInput>;
+  comments?: Maybe<CommentUpdateManyWithoutPostedByInput>;
+}
+
+export interface UserUpdateManyMutationInput {
+  name?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  username?: Maybe<String>;
+  moto?: Maybe<String>;
+  gender?: Maybe<Gender>;
+}
+
+export interface CommentSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<CommentWhereInput>;
+  AND?: Maybe<CommentSubscriptionWhereInput[] | CommentSubscriptionWhereInput>;
+  OR?: Maybe<CommentSubscriptionWhereInput[] | CommentSubscriptionWhereInput>;
+  NOT?: Maybe<CommentSubscriptionWhereInput[] | CommentSubscriptionWhereInput>;
+}
+
+export interface LoveSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<LoveWhereInput>;
+  AND?: Maybe<LoveSubscriptionWhereInput[] | LoveSubscriptionWhereInput>;
+  OR?: Maybe<LoveSubscriptionWhereInput[] | LoveSubscriptionWhereInput>;
+  NOT?: Maybe<LoveSubscriptionWhereInput[] | LoveSubscriptionWhereInput>;
+}
+
+export interface ThoughtSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<ThoughtWhereInput>;
+  AND?: Maybe<ThoughtSubscriptionWhereInput[] | ThoughtSubscriptionWhereInput>;
+  OR?: Maybe<ThoughtSubscriptionWhereInput[] | ThoughtSubscriptionWhereInput>;
+  NOT?: Maybe<ThoughtSubscriptionWhereInput[] | ThoughtSubscriptionWhereInput>;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<UserWhereInput>;
+  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
 export interface NodeNode {
   id: ID_Output;
-}
-
-export interface UserPreviousValues {
-  id: ID_Output;
-  name: String;
-  email: String;
-  password: String;
-  username: String;
-  moto: String;
-  gender: Gender;
-}
-
-export interface UserPreviousValuesPromise
-  extends Promise<UserPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-  username: () => Promise<String>;
-  moto: () => Promise<String>;
-  gender: () => Promise<Gender>;
-}
-
-export interface UserPreviousValuesSubscription
-  extends Promise<AsyncIterator<UserPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  username: () => Promise<AsyncIterator<String>>;
-  moto: () => Promise<AsyncIterator<String>>;
-  gender: () => Promise<AsyncIterator<Gender>>;
-}
-
-export interface AggregateComment {
-  count: Int;
-}
-
-export interface AggregateCommentPromise
-  extends Promise<AggregateComment>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateCommentSubscription
-  extends Promise<AsyncIterator<AggregateComment>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Follow {
-  id: ID_Output;
-}
-
-export interface FollowPromise extends Promise<Follow>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  user: <T = UserPromise>() => T;
-  followedUser: <T = UserPromise>() => T;
-}
-
-export interface FollowSubscription
-  extends Promise<AsyncIterator<Follow>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  user: <T = UserSubscription>() => T;
-  followedUser: <T = UserSubscription>() => T;
-}
-
-export interface FollowNullablePromise
-  extends Promise<Follow | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  user: <T = UserPromise>() => T;
-  followedUser: <T = UserPromise>() => T;
-}
-
-export interface FollowConnection {
-  pageInfo: PageInfo;
-  edges: FollowEdge[];
-}
-
-export interface FollowConnectionPromise
-  extends Promise<FollowConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<FollowEdge>>() => T;
-  aggregate: <T = AggregateFollowPromise>() => T;
-}
-
-export interface FollowConnectionSubscription
-  extends Promise<AsyncIterator<FollowConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<FollowEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateFollowSubscription>() => T;
-}
-
-export interface Love {
-  id: ID_Output;
-}
-
-export interface LovePromise extends Promise<Love>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  thought: <T = ThoughtPromise>() => T;
-  user: <T = UserPromise>() => T;
-}
-
-export interface LoveSubscription
-  extends Promise<AsyncIterator<Love>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  thought: <T = ThoughtSubscription>() => T;
-  user: <T = UserSubscription>() => T;
-}
-
-export interface LoveNullablePromise
-  extends Promise<Love | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  thought: <T = ThoughtPromise>() => T;
-  user: <T = UserPromise>() => T;
-}
-
-export interface ThoughtPreviousValues {
-  id: ID_Output;
-  createdAt?: DateTimeOutput;
-  content: String;
-}
-
-export interface ThoughtPreviousValuesPromise
-  extends Promise<ThoughtPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  content: () => Promise<String>;
-}
-
-export interface ThoughtPreviousValuesSubscription
-  extends Promise<AsyncIterator<ThoughtPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  content: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CommentEdge {
-  node: Comment;
-  cursor: String;
-}
-
-export interface CommentEdgePromise extends Promise<CommentEdge>, Fragmentable {
-  node: <T = CommentPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface CommentEdgeSubscription
-  extends Promise<AsyncIterator<CommentEdge>>,
-    Fragmentable {
-  node: <T = CommentSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface ThoughtSubscriptionPayload {
-  mutation: MutationType;
-  node: Thought;
-  updatedFields: String[];
-  previousValues: ThoughtPreviousValues;
-}
-
-export interface ThoughtSubscriptionPayloadPromise
-  extends Promise<ThoughtSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ThoughtPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ThoughtPreviousValuesPromise>() => T;
-}
-
-export interface ThoughtSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ThoughtSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ThoughtSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ThoughtPreviousValuesSubscription>() => T;
-}
-
-export interface AggregateThought {
-  count: Int;
-}
-
-export interface AggregateThoughtPromise
-  extends Promise<AggregateThought>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateThoughtSubscription
-  extends Promise<AsyncIterator<AggregateThought>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
 }
 
 export interface Comment {
@@ -1781,244 +1461,6 @@ export interface CommentNullablePromise
   thought: <T = ThoughtPromise>() => T;
   content: () => Promise<String>;
   postedBy: <T = UserPromise>() => T;
-}
-
-export interface ThoughtConnection {
-  pageInfo: PageInfo;
-  edges: ThoughtEdge[];
-}
-
-export interface ThoughtConnectionPromise
-  extends Promise<ThoughtConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ThoughtEdge>>() => T;
-  aggregate: <T = AggregateThoughtPromise>() => T;
-}
-
-export interface ThoughtConnectionSubscription
-  extends Promise<AsyncIterator<ThoughtConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ThoughtEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateThoughtSubscription>() => T;
-}
-
-export interface CommentSubscriptionPayload {
-  mutation: MutationType;
-  node: Comment;
-  updatedFields: String[];
-  previousValues: CommentPreviousValues;
-}
-
-export interface CommentSubscriptionPayloadPromise
-  extends Promise<CommentSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = CommentPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = CommentPreviousValuesPromise>() => T;
-}
-
-export interface CommentSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<CommentSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = CommentSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = CommentPreviousValuesSubscription>() => T;
-}
-
-export interface LoveEdge {
-  node: Love;
-  cursor: String;
-}
-
-export interface LoveEdgePromise extends Promise<LoveEdge>, Fragmentable {
-  node: <T = LovePromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface LoveEdgeSubscription
-  extends Promise<AsyncIterator<LoveEdge>>,
-    Fragmentable {
-  node: <T = LoveSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface CommentPreviousValues {
-  id: ID_Output;
-  createdAt?: DateTimeOutput;
-  content: String;
-}
-
-export interface CommentPreviousValuesPromise
-  extends Promise<CommentPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  content: () => Promise<String>;
-}
-
-export interface CommentPreviousValuesSubscription
-  extends Promise<AsyncIterator<CommentPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  content: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateFollow {
-  count: Int;
-}
-
-export interface AggregateFollowPromise
-  extends Promise<AggregateFollow>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateFollowSubscription
-  extends Promise<AsyncIterator<AggregateFollow>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface CommentConnection {
-  pageInfo: PageInfo;
-  edges: CommentEdge[];
-}
-
-export interface CommentConnectionPromise
-  extends Promise<CommentConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<CommentEdge>>() => T;
-  aggregate: <T = AggregateCommentPromise>() => T;
-}
-
-export interface CommentConnectionSubscription
-  extends Promise<AsyncIterator<CommentConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<CommentEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateCommentSubscription>() => T;
-}
-
-export interface UserEdge {
-  node: User;
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface FollowSubscriptionPayload {
-  mutation: MutationType;
-  node: Follow;
-  updatedFields: String[];
-  previousValues: FollowPreviousValues;
-}
-
-export interface FollowSubscriptionPayloadPromise
-  extends Promise<FollowSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = FollowPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = FollowPreviousValuesPromise>() => T;
-}
-
-export interface FollowSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<FollowSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = FollowSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = FollowPreviousValuesSubscription>() => T;
-}
-
-export interface ThoughtEdge {
-  node: Thought;
-  cursor: String;
-}
-
-export interface ThoughtEdgePromise extends Promise<ThoughtEdge>, Fragmentable {
-  node: <T = ThoughtPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface ThoughtEdgeSubscription
-  extends Promise<AsyncIterator<ThoughtEdge>>,
-    Fragmentable {
-  node: <T = ThoughtSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateLove {
-  count: Int;
-}
-
-export interface AggregateLovePromise
-  extends Promise<AggregateLove>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateLoveSubscription
-  extends Promise<AsyncIterator<AggregateLove>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface LovePreviousValues {
-  id: ID_Output;
-}
-
-export interface LovePreviousValuesPromise
-  extends Promise<LovePreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-}
-
-export interface LovePreviousValuesSubscription
-  extends Promise<AsyncIterator<LovePreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-}
-
-export interface LoveSubscriptionPayload {
-  mutation: MutationType;
-  node: Love;
-  updatedFields: String[];
-  previousValues: LovePreviousValues;
-}
-
-export interface LoveSubscriptionPayloadPromise
-  extends Promise<LoveSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = LovePromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = LovePreviousValuesPromise>() => T;
-}
-
-export interface LoveSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<LoveSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = LoveSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = LovePreviousValuesSubscription>() => T;
 }
 
 export interface Thought {
@@ -2106,43 +1548,6 @@ export interface ThoughtNullablePromise
   }) => T;
 }
 
-export interface FollowPreviousValues {
-  id: ID_Output;
-}
-
-export interface FollowPreviousValuesPromise
-  extends Promise<FollowPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-}
-
-export interface FollowPreviousValuesSubscription
-  extends Promise<AsyncIterator<FollowPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-}
-
-export interface LoveConnection {
-  pageInfo: PageInfo;
-  edges: LoveEdge[];
-}
-
-export interface LoveConnectionPromise
-  extends Promise<LoveConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<LoveEdge>>() => T;
-  aggregate: <T = AggregateLovePromise>() => T;
-}
-
-export interface LoveConnectionSubscription
-  extends Promise<AsyncIterator<LoveConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<LoveEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateLoveSubscription>() => T;
-}
-
 export interface User {
   id: ID_Output;
   name: String;
@@ -2161,18 +1566,18 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   username: () => Promise<String>;
   moto: () => Promise<String>;
   gender: () => Promise<Gender>;
-  followings: <T = FragmentableArray<Follow>>(args?: {
-    where?: FollowWhereInput;
-    orderBy?: FollowOrderByInput;
+  followings: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
   }) => T;
-  followers: <T = FragmentableArray<Follow>>(args?: {
-    where?: FollowWhereInput;
-    orderBy?: FollowOrderByInput;
+  followers: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -2218,18 +1623,18 @@ export interface UserSubscription
   username: () => Promise<AsyncIterator<String>>;
   moto: () => Promise<AsyncIterator<String>>;
   gender: () => Promise<AsyncIterator<Gender>>;
-  followings: <T = Promise<AsyncIterator<FollowSubscription>>>(args?: {
-    where?: FollowWhereInput;
-    orderBy?: FollowOrderByInput;
+  followings: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
   }) => T;
-  followers: <T = Promise<AsyncIterator<FollowSubscription>>>(args?: {
-    where?: FollowWhereInput;
-    orderBy?: FollowOrderByInput;
+  followers: <T = Promise<AsyncIterator<UserSubscription>>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -2275,18 +1680,18 @@ export interface UserNullablePromise
   username: () => Promise<String>;
   moto: () => Promise<String>;
   gender: () => Promise<Gender>;
-  followings: <T = FragmentableArray<Follow>>(args?: {
-    where?: FollowWhereInput;
-    orderBy?: FollowOrderByInput;
+  followings: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
   }) => T;
-  followers: <T = FragmentableArray<Follow>>(args?: {
-    where?: FollowWhereInput;
-    orderBy?: FollowOrderByInput;
+  followers: <T = FragmentableArray<User>>(args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -2322,6 +1727,422 @@ export interface UserNullablePromise
   }) => T;
 }
 
+export interface Love {
+  id: ID_Output;
+}
+
+export interface LovePromise extends Promise<Love>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  thought: <T = ThoughtPromise>() => T;
+  user: <T = UserPromise>() => T;
+}
+
+export interface LoveSubscription
+  extends Promise<AsyncIterator<Love>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  thought: <T = ThoughtSubscription>() => T;
+  user: <T = UserSubscription>() => T;
+}
+
+export interface LoveNullablePromise
+  extends Promise<Love | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  thought: <T = ThoughtPromise>() => T;
+  user: <T = UserPromise>() => T;
+}
+
+export interface CommentConnection {
+  pageInfo: PageInfo;
+  edges: CommentEdge[];
+}
+
+export interface CommentConnectionPromise
+  extends Promise<CommentConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CommentEdge>>() => T;
+  aggregate: <T = AggregateCommentPromise>() => T;
+}
+
+export interface CommentConnectionSubscription
+  extends Promise<AsyncIterator<CommentConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CommentEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCommentSubscription>() => T;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CommentEdge {
+  node: Comment;
+  cursor: String;
+}
+
+export interface CommentEdgePromise extends Promise<CommentEdge>, Fragmentable {
+  node: <T = CommentPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CommentEdgeSubscription
+  extends Promise<AsyncIterator<CommentEdge>>,
+    Fragmentable {
+  node: <T = CommentSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateComment {
+  count: Int;
+}
+
+export interface AggregateCommentPromise
+  extends Promise<AggregateComment>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCommentSubscription
+  extends Promise<AsyncIterator<AggregateComment>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface LoveConnection {
+  pageInfo: PageInfo;
+  edges: LoveEdge[];
+}
+
+export interface LoveConnectionPromise
+  extends Promise<LoveConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<LoveEdge>>() => T;
+  aggregate: <T = AggregateLovePromise>() => T;
+}
+
+export interface LoveConnectionSubscription
+  extends Promise<AsyncIterator<LoveConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<LoveEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateLoveSubscription>() => T;
+}
+
+export interface LoveEdge {
+  node: Love;
+  cursor: String;
+}
+
+export interface LoveEdgePromise extends Promise<LoveEdge>, Fragmentable {
+  node: <T = LovePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface LoveEdgeSubscription
+  extends Promise<AsyncIterator<LoveEdge>>,
+    Fragmentable {
+  node: <T = LoveSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateLove {
+  count: Int;
+}
+
+export interface AggregateLovePromise
+  extends Promise<AggregateLove>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateLoveSubscription
+  extends Promise<AsyncIterator<AggregateLove>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface ThoughtConnection {
+  pageInfo: PageInfo;
+  edges: ThoughtEdge[];
+}
+
+export interface ThoughtConnectionPromise
+  extends Promise<ThoughtConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ThoughtEdge>>() => T;
+  aggregate: <T = AggregateThoughtPromise>() => T;
+}
+
+export interface ThoughtConnectionSubscription
+  extends Promise<AsyncIterator<ThoughtConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ThoughtEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateThoughtSubscription>() => T;
+}
+
+export interface ThoughtEdge {
+  node: Thought;
+  cursor: String;
+}
+
+export interface ThoughtEdgePromise extends Promise<ThoughtEdge>, Fragmentable {
+  node: <T = ThoughtPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ThoughtEdgeSubscription
+  extends Promise<AsyncIterator<ThoughtEdge>>,
+    Fragmentable {
+  node: <T = ThoughtSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateThought {
+  count: Int;
+}
+
+export interface AggregateThoughtPromise
+  extends Promise<AggregateThought>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateThoughtSubscription
+  extends Promise<AsyncIterator<AggregateThought>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface CommentSubscriptionPayload {
+  mutation: MutationType;
+  node: Comment;
+  updatedFields: String[];
+  previousValues: CommentPreviousValues;
+}
+
+export interface CommentSubscriptionPayloadPromise
+  extends Promise<CommentSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CommentPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CommentPreviousValuesPromise>() => T;
+}
+
+export interface CommentSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CommentSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CommentSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CommentPreviousValuesSubscription>() => T;
+}
+
+export interface CommentPreviousValues {
+  id: ID_Output;
+  createdAt?: DateTimeOutput;
+  content: String;
+}
+
+export interface CommentPreviousValuesPromise
+  extends Promise<CommentPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  content: () => Promise<String>;
+}
+
+export interface CommentPreviousValuesSubscription
+  extends Promise<AsyncIterator<CommentPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  content: () => Promise<AsyncIterator<String>>;
+}
+
+export interface LoveSubscriptionPayload {
+  mutation: MutationType;
+  node: Love;
+  updatedFields: String[];
+  previousValues: LovePreviousValues;
+}
+
+export interface LoveSubscriptionPayloadPromise
+  extends Promise<LoveSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = LovePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = LovePreviousValuesPromise>() => T;
+}
+
+export interface LoveSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<LoveSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = LoveSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = LovePreviousValuesSubscription>() => T;
+}
+
+export interface LovePreviousValues {
+  id: ID_Output;
+}
+
+export interface LovePreviousValuesPromise
+  extends Promise<LovePreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+}
+
+export interface LovePreviousValuesSubscription
+  extends Promise<AsyncIterator<LovePreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+}
+
+export interface ThoughtSubscriptionPayload {
+  mutation: MutationType;
+  node: Thought;
+  updatedFields: String[];
+  previousValues: ThoughtPreviousValues;
+}
+
+export interface ThoughtSubscriptionPayloadPromise
+  extends Promise<ThoughtSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ThoughtPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ThoughtPreviousValuesPromise>() => T;
+}
+
+export interface ThoughtSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ThoughtSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ThoughtSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ThoughtPreviousValuesSubscription>() => T;
+}
+
+export interface ThoughtPreviousValues {
+  id: ID_Output;
+  createdAt?: DateTimeOutput;
+  content: String;
+}
+
+export interface ThoughtPreviousValuesPromise
+  extends Promise<ThoughtPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  content: () => Promise<String>;
+}
+
+export interface ThoughtPreviousValuesSubscription
+  extends Promise<AsyncIterator<ThoughtPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  content: () => Promise<AsyncIterator<String>>;
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -2347,27 +2168,39 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
-export interface FollowEdge {
-  node: Follow;
-  cursor: String;
+export interface UserPreviousValues {
+  id: ID_Output;
+  name: String;
+  email: String;
+  password: String;
+  username: String;
+  moto: String;
+  gender: Gender;
 }
 
-export interface FollowEdgePromise extends Promise<FollowEdge>, Fragmentable {
-  node: <T = FollowPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface FollowEdgeSubscription
-  extends Promise<AsyncIterator<FollowEdge>>,
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
     Fragmentable {
-  node: <T = FollowSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  username: () => Promise<String>;
+  moto: () => Promise<String>;
+  gender: () => Promise<Gender>;
 }
 
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  username: () => Promise<AsyncIterator<String>>;
+  moto: () => Promise<AsyncIterator<String>>;
+  gender: () => Promise<AsyncIterator<Gender>>;
+}
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -2385,7 +2218,10 @@ DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
 
-export type Long = string;
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
@@ -2396,6 +2232,8 @@ export type Int = number;
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
+
+export type Long = string;
 
 /**
  * Model Metadata
@@ -2416,10 +2254,6 @@ export const models: Model[] = [
   },
   {
     name: "Comment",
-    embedded: false
-  },
-  {
-    name: "Follow",
     embedded: false
   },
   {
