@@ -38,9 +38,14 @@ async function follow(parent, args, context, info) {
   const followUser = await context.prisma.user({ id: args.followId });
   if (!followUser) throw new Error("Following user does not exist");
 
-  return context.prisma.createFollow({
-    user: { connect: { id: userId } },
-    followedUser: { connect: { id: args.followId } }
+  await context.prisma.updateUser({
+    where: {id: args.followId},
+    data: {followers: {connect: {id: userId}}}
+  });
+  
+  return context.prisma.updateUser({
+    where: {id: userId},
+    data: {followings: {connect: {id: args.followId}}}
   });
 }
 
@@ -50,9 +55,14 @@ async function unFollow(parent, args, context, info) {
   const followUser = await context.prisma.user({ id: args.followId });
   if (!followUser) throw new Error("Following user does not exist");
 
-  return context.prisma.deleteFollow({
-    user: userId,
-    followedUser: followedUser.id
+  await context.prisma.updateUser({
+    where: {id: args.followId},
+    data: {followers: {disconnect: {id: userId}}}
+  });
+  
+  return context.prisma.updateUser({
+    where: {id: userId},
+    data: {followings: {disconnect: {id: args.followId}}}
   });
 }
 

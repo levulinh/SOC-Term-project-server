@@ -11,8 +11,8 @@ type User {
   username: String! @unique
   moto: String!
   gender: Gender!
-  followings: [User!]! @relation(name: "Followings")
-  followers: [User!]! @relation(name: "Followers")
+  followings: [User!]! @relation(name: "Followers")
+  followers: [User!]! @relation(name: "Followings")
   thoughts: [Thought!]!
   loves: [Love!]!
   comments: [Comment!]!

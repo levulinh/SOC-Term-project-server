@@ -27,10 +27,31 @@ type Query {
   ): UserSearchEntry
   user(userId: ID, email: String): User!
   userEntry(userId: ID, email: String): UserEntry!
+  getFeed(orderBy: ThoughtOrderByInput): FeedEntry
+}
+
+type FeedEntry {
+  count: Int,
+  thoughts: [Thought]
 }
 
 type UserEntry {
+  id: ID!
+  name: String!
+  email: String!
+  username: String!
+  moto: String
+  gender: Gender
+  followings: FollowEntry
+  followers: FollowEntry
+  thoughts: [Thought]
+  loves: [Love]
+  comments: [Comment!]!
+}
 
+type FollowEntry {
+  count: Int,
+  users: [User]
 }
 
 type UserSearchEntry {
