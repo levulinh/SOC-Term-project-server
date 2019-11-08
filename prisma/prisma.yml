@@ -2,7 +2,8 @@
 #endpoint: ''
 #endpoint: ''
 #endpoint: ""
-endpoint: https://us1.prisma.sh/linh-le-vu-c4ac54/socialnet/dev
+#endpoint: ''
+endpoint: https://us1.prisma.sh/linh-le-vu-c4ac54/linh/dev
 
 # Points to the file that contains your datamodel
 datamodel: datamodel.graphql

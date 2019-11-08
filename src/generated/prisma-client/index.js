@@ -28,6 +28,6 @@ var models = [
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `https://us1.prisma.sh/linh-le-vu-c4ac54/socialnet/dev`
+  endpoint: `https://us1.prisma.sh/linh-le-vu-c4ac54/linh/dev`
 });
 exports.prisma = new exports.Prisma();

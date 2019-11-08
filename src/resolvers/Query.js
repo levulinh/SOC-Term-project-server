@@ -50,13 +50,14 @@ async function userEntry(parent, args, context, info) {
       }
     : {};
 
-  const users = context.prisma.users({
-    where,
-  })
+  const user = await context.prisma.user(where)
 
-  const userEntry = JSON.parse(JSON.stringify(users));
-  userEntry.followers = {count: userEntry.followers.length, users: userEntry.followers}
-  userEntry.followings = {count: userEntry.followings.length, users: userEntry.followings}
+  const userEntry = JSON.parse(JSON.stringify(user));
+  const followers = await context.prisma.user(where).followers()
+  const followings = await context.prisma.user(where).followings()
+
+  userEntry.followers = {count: followers.length, users: followers}
+  userEntry.followings = {count: followings.length, users: followings}
 
   return userEntry
 }
