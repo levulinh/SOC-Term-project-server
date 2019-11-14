@@ -39,14 +39,25 @@ async function follow(parent, args, context, info) {
   if (!followUser) throw new Error("Following user does not exist");
 
   await context.prisma.updateUser({
-    where: {id: args.followId},
-    data: {followers: {connect: {id: userId}}}
+    where: { id: args.followId },
+    data: { followers: { connect: { id: userId } } }
   });
-  
-  return context.prisma.updateUser({
-    where: {id: userId},
-    data: {followings: {connect: {id: args.followId}}}
+
+  await context.prisma.updateUser({
+    where: { id: userId },
+    data: { followings: { connect: { id: args.followId } } }
   });
+
+  const user = await context.prisma.user({ id: args.followId })
+
+  const userEntry = JSON.parse(JSON.stringify(user));
+  const followers = await context.prisma.user({ id: args.followId }).followers()
+  const followings = await context.prisma.user({ id: args.followId }).followings()
+
+  userEntry.followers = { count: followers.length, users: followers }
+  userEntry.followings = { count: followings.length, users: followings }
+
+  return userEntry
 }
 
 async function unFollow(parent, args, context, info) {
@@ -56,14 +67,26 @@ async function unFollow(parent, args, context, info) {
   if (!followUser) throw new Error("Following user does not exist");
 
   await context.prisma.updateUser({
-    where: {id: args.followId},
-    data: {followers: {disconnect: {id: userId}}}
+    where: { id: args.followId },
+    data: { followers: { disconnect: { id: userId } } }
   });
-  
-  return context.prisma.updateUser({
-    where: {id: userId},
-    data: {followings: {disconnect: {id: args.followId}}}
+
+  await context.prisma.updateUser({
+    where: { id: userId },
+    data: { followings: { disconnect: { id: args.followId } } }
   });
+
+
+  const user = await context.prisma.user({ id: args.followId })
+
+  const userEntry = JSON.parse(JSON.stringify(user));
+  const followers = await context.prisma.user({ id: args.followId }).followers()
+  const followings = await context.prisma.user({ id: args.followId }).followings()
+
+  userEntry.followers = { count: followers.length, users: followers }
+  userEntry.followings = { count: followings.length, users: followings }
+
+  return userEntry
 }
 
 async function post(parent, args, context, info) {
@@ -78,20 +101,43 @@ async function post(parent, args, context, info) {
 async function comment(parent, args, context, info) {
   const userId = getUserId(context);
 
-  return context.prisma.createComment({
+  await context.prisma.createComment({
     content: args.content,
     postedBy: { connect: { id: userId } },
     thought: { connect: { id: args.thoughtId } }
   });
+
+  return context.prisma.thought({ id: args.thoughtId })
 }
 
 async function love(parent, args, context, info) {
   const userId = getUserId(context);
 
+  const exist = await context.prisma.$exists.love({
+    user: { id: userId },
+    thought: { id: args.thoughtId }
+  })
+
+  if (exist) throw new Error("Already loved this thought");
+
   return context.prisma.createLove({
     thought: { connect: { id: args.thoughtId } },
     user: { connect: { id: userId } }
   });
+}
+
+async function unlove(parent, args, context, info) {
+  const userId = getUserId(context);
+
+  const exist = await context.prisma.$exists.love({
+    user: { id: userId },
+    thought: { id: args.thoughtId }
+  })
+
+  if (!exist) throw new Error("Haven't loved this thought");
+
+  await context.prisma.deleteManyLoves({ user: { id: userId }, thought: { id: args.thoughtId } });
+  return context.prisma.thought({ id: args.thoughtId });
 }
 
 module.exports = {
@@ -101,5 +147,6 @@ module.exports = {
   unFollow,
   post,
   love,
+  unlove,
   comment
 };

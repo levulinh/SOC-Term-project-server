@@ -17,6 +17,12 @@ enum Gender {
   FEMALE
 }
 
+type Subscription {
+  newThought: Thought
+  newComment(thoughtId: ID!): Comment
+  newUserThought(username: String!): Thought
+}
+
 type Query {
   info: String!
   users(
@@ -26,12 +32,14 @@ type Query {
     orderBy: UserOrderByInput
   ): UserSearchEntry
   user(userId: ID, email: String): User!
-  userEntry(userId: ID, email: String): UserEntry!
+  userEntry(userId: ID, email: String, username: String): UserEntry!
   getFeed(orderBy: ThoughtOrderByInput): FeedEntry
+  thought(thoughtId: ID!): Thought!
+  thoughts(username: String!): FeedEntry
 }
 
 type FeedEntry {
-  count: Int,
+  count: Int
   thoughts: [Thought]
 }
 
@@ -50,7 +58,7 @@ type UserEntry {
 }
 
 type FollowEntry {
-  count: Int,
+  count: Int
   users: [User]
 }
 
@@ -69,11 +77,12 @@ type Mutation {
     moto: String
   ): AuthPayload
   login(email: String!, password: String!): AuthPayload
-  follow(followId: ID): User
-  unFollow(followId: ID): User
+  follow(followId: ID): UserEntry
+  unFollow(followId: ID): UserEntry
   post(content: String!): Thought
   love(thoughtId: ID!): Love
-  comment(thoughtId: ID!, content: String!): Comment
+  unlove(thoughtId: ID!): Thought
+  comment(thoughtId: ID!, content: String!): Thought
 }
 
 type AuthPayload {
