@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { APP_SECRET, getUserId } = require("../utils");
+const axios = require('axios');
 
 async function signup(parent, args, context, info) {
   const password = await bcrypt.hash(args.password, 10);
@@ -92,8 +93,15 @@ async function unFollow(parent, args, context, info) {
 async function post(parent, args, context, info) {
   const userId = getUserId(context);
 
+  const news = await axios.post('http://localhost:2808/news/predict', {
+    text: args.content
+  })
+
+  // console.log("news", news)
+
   return context.prisma.createThought({
     content: args.content,
+    news: news.data.result,
     postedBy: { connect: { id: userId } }
   });
 }

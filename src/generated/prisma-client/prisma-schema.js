@@ -520,6 +520,7 @@ type Subscription {
 type Thought {
   id: ID!
   postedBy: User!
+  news: String
   createdAt: DateTime
   content: String!
   loves(where: LoveWhereInput, orderBy: LoveOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Love!]
@@ -535,6 +536,7 @@ type ThoughtConnection {
 input ThoughtCreateInput {
   id: ID
   postedBy: UserCreateOneWithoutThoughtsInput!
+  news: String
   content: String!
   loves: LoveCreateManyWithoutThoughtInput
   comments: CommentCreateManyWithoutThoughtInput
@@ -558,6 +560,7 @@ input ThoughtCreateOneWithoutLovesInput {
 input ThoughtCreateWithoutCommentsInput {
   id: ID
   postedBy: UserCreateOneWithoutThoughtsInput!
+  news: String
   content: String!
   loves: LoveCreateManyWithoutThoughtInput
 }
@@ -565,12 +568,14 @@ input ThoughtCreateWithoutCommentsInput {
 input ThoughtCreateWithoutLovesInput {
   id: ID
   postedBy: UserCreateOneWithoutThoughtsInput!
+  news: String
   content: String!
   comments: CommentCreateManyWithoutThoughtInput
 }
 
 input ThoughtCreateWithoutPostedByInput {
   id: ID
+  news: String
   content: String!
   loves: LoveCreateManyWithoutThoughtInput
   comments: CommentCreateManyWithoutThoughtInput
@@ -584,6 +589,8 @@ type ThoughtEdge {
 enum ThoughtOrderByInput {
   id_ASC
   id_DESC
+  news_ASC
+  news_DESC
   createdAt_ASC
   createdAt_DESC
   content_ASC
@@ -592,6 +599,7 @@ enum ThoughtOrderByInput {
 
 type ThoughtPreviousValues {
   id: ID!
+  news: String
   createdAt: DateTime
   content: String!
 }
@@ -611,6 +619,20 @@ input ThoughtScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  news: String
+  news_not: String
+  news_in: [String!]
+  news_not_in: [String!]
+  news_lt: String
+  news_lte: String
+  news_gt: String
+  news_gte: String
+  news_contains: String
+  news_not_contains: String
+  news_starts_with: String
+  news_not_starts_with: String
+  news_ends_with: String
+  news_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -658,16 +680,19 @@ input ThoughtSubscriptionWhereInput {
 
 input ThoughtUpdateInput {
   postedBy: UserUpdateOneRequiredWithoutThoughtsInput
+  news: String
   content: String
   loves: LoveUpdateManyWithoutThoughtInput
   comments: CommentUpdateManyWithoutThoughtInput
 }
 
 input ThoughtUpdateManyDataInput {
+  news: String
   content: String
 }
 
 input ThoughtUpdateManyMutationInput {
+  news: String
   content: String
 }
 
@@ -704,17 +729,20 @@ input ThoughtUpdateOneRequiredWithoutLovesInput {
 
 input ThoughtUpdateWithoutCommentsDataInput {
   postedBy: UserUpdateOneRequiredWithoutThoughtsInput
+  news: String
   content: String
   loves: LoveUpdateManyWithoutThoughtInput
 }
 
 input ThoughtUpdateWithoutLovesDataInput {
   postedBy: UserUpdateOneRequiredWithoutThoughtsInput
+  news: String
   content: String
   comments: CommentUpdateManyWithoutThoughtInput
 }
 
 input ThoughtUpdateWithoutPostedByDataInput {
+  news: String
   content: String
   loves: LoveUpdateManyWithoutThoughtInput
   comments: CommentUpdateManyWithoutThoughtInput
@@ -757,6 +785,20 @@ input ThoughtWhereInput {
   id_ends_with: ID
   id_not_ends_with: ID
   postedBy: UserWhereInput
+  news: String
+  news_not: String
+  news_in: [String!]
+  news_not_in: [String!]
+  news_lt: String
+  news_lte: String
+  news_gt: String
+  news_gte: String
+  news_contains: String
+  news_not_contains: String
+  news_starts_with: String
+  news_not_starts_with: String
+  news_ends_with: String
+  news_not_ends_with: String
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

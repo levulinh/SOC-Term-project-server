@@ -235,6 +235,8 @@ export type UserOrderByInput =
 export type ThoughtOrderByInput =
   | "id_ASC"
   | "id_DESC"
+  | "news_ASC"
+  | "news_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "content_ASC"
@@ -381,6 +383,20 @@ export interface ThoughtWhereInput {
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
   postedBy?: Maybe<UserWhereInput>;
+  news?: Maybe<String>;
+  news_not?: Maybe<String>;
+  news_in?: Maybe<String[] | String>;
+  news_not_in?: Maybe<String[] | String>;
+  news_lt?: Maybe<String>;
+  news_lte?: Maybe<String>;
+  news_gt?: Maybe<String>;
+  news_gte?: Maybe<String>;
+  news_contains?: Maybe<String>;
+  news_not_contains?: Maybe<String>;
+  news_starts_with?: Maybe<String>;
+  news_not_starts_with?: Maybe<String>;
+  news_ends_with?: Maybe<String>;
+  news_not_ends_with?: Maybe<String>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -509,6 +525,7 @@ export interface ThoughtCreateOneWithoutCommentsInput {
 export interface ThoughtCreateWithoutCommentsInput {
   id?: Maybe<ID_Input>;
   postedBy: UserCreateOneWithoutThoughtsInput;
+  news?: Maybe<String>;
   content: String;
   loves?: Maybe<LoveCreateManyWithoutThoughtInput>;
 }
@@ -583,6 +600,7 @@ export interface ThoughtCreateManyWithoutPostedByInput {
 
 export interface ThoughtCreateWithoutPostedByInput {
   id?: Maybe<ID_Input>;
+  news?: Maybe<String>;
   content: String;
   loves?: Maybe<LoveCreateManyWithoutThoughtInput>;
   comments?: Maybe<CommentCreateManyWithoutThoughtInput>;
@@ -682,6 +700,7 @@ export interface ThoughtCreateOneWithoutLovesInput {
 export interface ThoughtCreateWithoutLovesInput {
   id?: Maybe<ID_Input>;
   postedBy: UserCreateOneWithoutThoughtsInput;
+  news?: Maybe<String>;
   content: String;
   comments?: Maybe<CommentCreateManyWithoutThoughtInput>;
 }
@@ -701,6 +720,7 @@ export interface ThoughtUpdateOneRequiredWithoutCommentsInput {
 
 export interface ThoughtUpdateWithoutCommentsDataInput {
   postedBy?: Maybe<UserUpdateOneRequiredWithoutThoughtsInput>;
+  news?: Maybe<String>;
   content?: Maybe<String>;
   loves?: Maybe<LoveUpdateManyWithoutThoughtInput>;
 }
@@ -834,6 +854,7 @@ export interface ThoughtUpdateWithWhereUniqueWithoutPostedByInput {
 }
 
 export interface ThoughtUpdateWithoutPostedByDataInput {
+  news?: Maybe<String>;
   content?: Maybe<String>;
   loves?: Maybe<LoveUpdateManyWithoutThoughtInput>;
   comments?: Maybe<CommentUpdateManyWithoutThoughtInput>;
@@ -1096,6 +1117,7 @@ export interface ThoughtUpdateOneRequiredWithoutLovesInput {
 
 export interface ThoughtUpdateWithoutLovesDataInput {
   postedBy?: Maybe<UserUpdateOneRequiredWithoutThoughtsInput>;
+  news?: Maybe<String>;
   content?: Maybe<String>;
   comments?: Maybe<CommentUpdateManyWithoutThoughtInput>;
 }
@@ -1143,6 +1165,20 @@ export interface ThoughtScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
+  news?: Maybe<String>;
+  news_not?: Maybe<String>;
+  news_in?: Maybe<String[] | String>;
+  news_not_in?: Maybe<String[] | String>;
+  news_lt?: Maybe<String>;
+  news_lte?: Maybe<String>;
+  news_gt?: Maybe<String>;
+  news_gte?: Maybe<String>;
+  news_contains?: Maybe<String>;
+  news_not_contains?: Maybe<String>;
+  news_starts_with?: Maybe<String>;
+  news_not_starts_with?: Maybe<String>;
+  news_ends_with?: Maybe<String>;
+  news_not_ends_with?: Maybe<String>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -1176,6 +1212,7 @@ export interface ThoughtUpdateManyWithWhereNestedInput {
 }
 
 export interface ThoughtUpdateManyDataInput {
+  news?: Maybe<String>;
   content?: Maybe<String>;
 }
 
@@ -1327,6 +1364,7 @@ export interface LoveUpdateInput {
 export interface ThoughtCreateInput {
   id?: Maybe<ID_Input>;
   postedBy: UserCreateOneWithoutThoughtsInput;
+  news?: Maybe<String>;
   content: String;
   loves?: Maybe<LoveCreateManyWithoutThoughtInput>;
   comments?: Maybe<CommentCreateManyWithoutThoughtInput>;
@@ -1334,12 +1372,14 @@ export interface ThoughtCreateInput {
 
 export interface ThoughtUpdateInput {
   postedBy?: Maybe<UserUpdateOneRequiredWithoutThoughtsInput>;
+  news?: Maybe<String>;
   content?: Maybe<String>;
   loves?: Maybe<LoveUpdateManyWithoutThoughtInput>;
   comments?: Maybe<CommentUpdateManyWithoutThoughtInput>;
 }
 
 export interface ThoughtUpdateManyMutationInput {
+  news?: Maybe<String>;
   content?: Maybe<String>;
 }
 
@@ -1465,6 +1505,7 @@ export interface CommentNullablePromise
 
 export interface Thought {
   id: ID_Output;
+  news?: String;
   createdAt?: DateTimeOutput;
   content: String;
 }
@@ -1472,6 +1513,7 @@ export interface Thought {
 export interface ThoughtPromise extends Promise<Thought>, Fragmentable {
   id: () => Promise<ID_Output>;
   postedBy: <T = UserPromise>() => T;
+  news: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   content: () => Promise<String>;
   loves: <T = FragmentableArray<Love>>(args?: {
@@ -1499,6 +1541,7 @@ export interface ThoughtSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   postedBy: <T = UserSubscription>() => T;
+  news: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   content: () => Promise<AsyncIterator<String>>;
   loves: <T = Promise<AsyncIterator<LoveSubscription>>>(args?: {
@@ -1526,6 +1569,7 @@ export interface ThoughtNullablePromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   postedBy: <T = UserPromise>() => T;
+  news: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   content: () => Promise<String>;
   loves: <T = FragmentableArray<Love>>(args?: {
@@ -2123,6 +2167,7 @@ export interface ThoughtSubscriptionPayloadSubscription
 
 export interface ThoughtPreviousValues {
   id: ID_Output;
+  news?: String;
   createdAt?: DateTimeOutput;
   content: String;
 }
@@ -2131,6 +2176,7 @@ export interface ThoughtPreviousValuesPromise
   extends Promise<ThoughtPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
+  news: () => Promise<String>;
   createdAt: () => Promise<DateTimeOutput>;
   content: () => Promise<String>;
 }
@@ -2139,6 +2185,7 @@ export interface ThoughtPreviousValuesSubscription
   extends Promise<AsyncIterator<ThoughtPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
+  news: () => Promise<AsyncIterator<String>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   content: () => Promise<AsyncIterator<String>>;
 }

@@ -21,6 +21,7 @@ type User {
 type Thought {
   id: ID! @id
   postedBy: User!
+  news: String
   createdAt: DateTime @createdAt
   content: String!
   loves: [Love!]!

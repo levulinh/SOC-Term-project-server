@@ -106,6 +106,7 @@ type User {
 
 type Thought {
   id: ID!
+  news: String
   content: String!
   postedBy: User!
   createdAt: DateTime!
